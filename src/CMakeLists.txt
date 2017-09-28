@@ -52,6 +52,7 @@ add_executable(main
 target_link_libraries(main
   PUBLIC
   scheme-lib
+  edit
   )
 
 target_include_directories(main

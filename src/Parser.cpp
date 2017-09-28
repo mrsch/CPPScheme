@@ -42,6 +42,7 @@ std::optional<List> parse_list(std::string& expr)
       list.emplace_back(std::make_unique<Scheme_value>(parse(expr)));
     }
     expr.erase(0, 1);
+    trim(expr);
 
     return List(list);
   }
@@ -62,9 +63,11 @@ std::optional<Character> parse_character(std::string& expr)
 {
   if (expr.find_first_of("#\\space") == 0) {
     expr.erase(0, 7);
+    trim(expr);
     return Character(' ');
   } else if (expr.find_first_of("#\\newline") == 0) {
     expr.erase(0, 9);
+    trim(expr);
     return Character('\n');
   } else if (expr.find_first_of("#\\") == 0) {
     expr.erase(0, 2);
