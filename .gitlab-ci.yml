@@ -1,0 +1,73 @@
+image: devlodge/arch-minimal
+
+# before_script:
+#   # Run ssh-agent (inside the build environment)
+#   - eval $(ssh-agent -s)
+
+#   # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+#   - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+#   # For Docker builds disable host key checking. Be aware that by adding that
+#   # you are suspectible to man-in-the-middle attacks.
+#   # WARNING: Use this only with the Docker executor, if you use it with shell
+#   # you will overwrite your user's SSH config.
+#   - mkdir -p ~/.ssh
+#   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+stages:
+#  - prebuild
+  - build
+  - test
+
+# prebuild:
+#   stage: prebuild
+#   artifacts:
+#     paths:
+#   script:
+
+build-release:
+  stage: build
+  artifacts:
+    paths:
+      - bin
+  script:
+    - mkdir -p build/
+    - cd build
+    - export CC=clang
+    - export CXX=clang++
+    - cmake -DCMAKE_BUILD_TYPE=Release ../
+    - make -j6
+
+build-gcc:
+  stage: build
+  script:
+    - mkdir -p build/
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug ../
+    - make -j6
+
+build-clang:
+  stage: build
+  script:
+    - mkdir -p build/
+    - cd build
+    - export CC=clang
+    - export CXX=clang++
+    - cmake -DCMAKE_BUILD_TYPE=Debug ../
+    - make -j6
+  
+test:
+  stage: test
+  script:
+    - cd bin && ./unit_test
+
+coverage:
+  stage: test
+  artifacts:
+    paths:
+      - coverage
+  script:
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON ./
+    - make -j6
+    - make coverage
+    - gcovr -r .

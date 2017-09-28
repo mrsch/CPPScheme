@@ -1,0 +1,8 @@
+* Setup
+  1. Run =cmake -E chdir build cmake ..= to setup the project
+  2. Compile with =cmake --build build=
+  3. Run main: =cd bin && ./main=
+  4. Run tests: =cd bin && ./unit_test=
+* Features
+  - Supports all R5RS [[www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_2.1][identifiers]]
+  - Character [[http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_6.3.4][literals]]
