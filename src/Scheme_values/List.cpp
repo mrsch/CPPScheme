@@ -10,6 +10,10 @@ List::List(const std::vector<Scheme_value>& list) : list(list)
 
 std::string List::as_string()
 {
+  if (list.size() == 0) {
+    return "()";
+  }
+
   std::string res = "(";
   for (auto& e : list) {
     res += e.as_string() + " ";
@@ -40,10 +44,28 @@ Scheme_value List::eval(const std::shared_ptr<Environment>& env)
 
     // Primitive Expressions
     if (atom.as_string() == "define") {
-      env->add_to_env(list[1].get_value<Atom>().value().as_string(),
-                      list[2].eval(env));
+      if (auto atom = list[1].get_value<Atom>(); atom.has_value()) {
+        env->add_to_env(atom.value().as_string(), list[2].eval(env));
+        return Scheme_value{atom.value()};
+      } else { // Lambda definition
+        auto func_definition = list[1].get_value<List>().value();
+        auto func_name = func_definition.get_list()[0].as_string();
 
-      return Scheme_value{list[1]};
+        std::vector<Scheme_value> params;
+        for (size_t i = 1; i < func_definition.get_list().size(); ++i) {
+          params.push_back(func_definition.get_list()[i]);
+        }
+
+        std::vector<Scheme_value> body_expressions;
+        for (size_t i = 2; i < list.size(); ++i) {
+          body_expressions.emplace_back(list[i]);
+        }
+
+        env->add_to_env(
+          func_name, Scheme_value{Lambda(List(params), body_expressions, env)});
+
+        return func_definition.get_list()[0];
+      }
     } else if (atom.as_string() == "quote") {
       return Scheme_value{list[1]};
     } else if (atom.as_string() == "lambda") {

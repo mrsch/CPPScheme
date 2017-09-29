@@ -20,6 +20,7 @@ class Environment;
 
 class Scheme_value
 {
+  // TODO: Dotted list/Pair
   using Value = std::variant<Nil,
                              Atom,
                              List,

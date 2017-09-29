@@ -14,6 +14,7 @@
   - [ ] Backquote
 ** Primitive Expression
    - [X] define
+     - [X] shorthand lambda define
    - [X] quote
    - [X] lambda
    - [X] procedure call
@@ -32,15 +33,19 @@
    - [ ] quasiquote
 ** Macros
 ** Procedures
+   - [X] apply
    - [X] eval
+   - [X] car
+   - [X] cdr
+   - [X] cons
    - [ ] eqv?
    - [ ] eq?
    - [ ] equal=
 *** Math
-   - [ ] +
-   - [ ] - 
-   - [ ] *
-   - [ ] quotient 
+   - [X] +
+   - [X] - 
+   - [X] *
+   - [X] / 
    - [ ] remainder 
    - [ ] modulo
    - [ ] max min abs
@@ -55,11 +60,11 @@
    - [ ] rationalize
    - [ ] expt
 *** Numerical
-    - [ ] =
-    - [ ] <
-    - [ ] >
-    - [ ] <=
-    - [ ] >=
+    - [X] =
+    - [X] <
+    - [X] >
+    - [X] <=
+    - [X] >=
     - [ ] number?
     - [ ] complex?
     - [ ] real?
