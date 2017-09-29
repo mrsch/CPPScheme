@@ -3,15 +3,21 @@
 
 #include <string>
 
+class Scheme_value;
+class Environment;
+
 class Number
 {
 public:
-  explicit Number(int number) : number(number){};
+  explicit Number(int number);
 
-  std::string as_string() const
+  std::string as_string() const;
+  Scheme_value eval(Environment& env);
+
+  int get_number() const
   {
-    return std::to_string(number);
-  };
+    return number;
+  }
 
 private:
   int number;

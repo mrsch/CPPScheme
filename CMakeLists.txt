@@ -21,7 +21,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 project("Scheme" VERSION "0.0.1" LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 
-
 ## #################################################################
 ## Output paths of library/executable
 ## #################################################################
@@ -59,6 +58,8 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
 set(EXT_PROJECTS_DIR
   ${PROJECT_SOURCE_DIR}/thirdparty)
+
+add_subdirectory(${EXT_PROJECTS_DIR}/fmtlib EXCLUDE_FROM_ALL)
 
 ## #################################################################
 ## Source Path

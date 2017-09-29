@@ -1,5 +1,8 @@
 #include "Utils.hpp"
 
+#include <optional>
+#include <unordered_map>
+
 void left_trim(std::string& s)
 {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {

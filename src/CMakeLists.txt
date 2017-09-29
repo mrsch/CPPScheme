@@ -3,15 +3,26 @@
 ## #################################################################
 
 add_library(scheme-lib
-  Parser.cpp
-  Utils.cpp
   Atom.cpp
+  Bool.cpp
+  Built_in.cpp
+  Character.cpp
+  Environment.cpp
+  Lambda.cpp
   List.cpp
+  Nil.cpp
+  Number.cpp
+  Parser.cpp
   Scheme_value.cpp
+  Scheme.cpp
+  String.cpp
+  Utils.cpp
   )
 
 target_link_libraries(scheme-lib
-  PUBLIC)
+  PUBLIC
+  PRIVATE
+  fmt::fmt-header-only)
 
 target_include_directories(scheme-lib
   PUBLIC
@@ -39,7 +50,6 @@ elseif (MSVC)
     PUBLIC /W4 /W44640
     )
 endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 ## #################################################################
 ## Example executable

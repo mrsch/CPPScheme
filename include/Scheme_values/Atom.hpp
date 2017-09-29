@@ -3,15 +3,16 @@
 
 #include <string>
 
+class Scheme_value;
+class Environment;
+
 class Atom
 {
 public:
   explicit Atom(const std::string& atom);
 
-  std::string as_string() const
-  {
-    return name;
-  };
+  Scheme_value eval(Environment& env);
+  std::string as_string() const;
 
 private:
   std::string name;

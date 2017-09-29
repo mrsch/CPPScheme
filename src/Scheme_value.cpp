@@ -1,5 +1,7 @@
 #include "Scheme_value.hpp"
 
+#include "Environment.hpp"
+
 #include <iostream>
 
 struct Print_visitor {
@@ -10,6 +12,19 @@ struct Print_visitor {
   }
 };
 
+struct Eval_visitor {
+  explicit Eval_visitor(Environment& env) : env(env){};
+
+  template <typename T>
+  Scheme_value operator()(T value)
+  {
+    return value.eval(env);
+  }
+
+private:
+  Environment& env;
+};
+
 Scheme_value::Scheme_value(Value value) : value(value)
 {
 }
@@ -17,4 +32,9 @@ Scheme_value::Scheme_value(Value value) : value(value)
 std::string Scheme_value::as_string()
 {
   return std::visit(Print_visitor{}, value);
+}
+
+Scheme_value Scheme_value::eval(Environment& env)
+{
+  return std::visit(Eval_visitor(env), value);
 }

@@ -3,15 +3,16 @@
 
 #include <string>
 
+class Scheme_value;
+class Environment;
+
 class String
 {
 public:
-  explicit String(const std::string& str) : str(str){};
+  explicit String(const std::string& str);
 
-  std::string as_string() const
-  {
-    return str;
-  };
+  std::string as_string() const;
+  Scheme_value eval(Environment& env);
 
 private:
   std::string str;

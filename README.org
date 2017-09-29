@@ -4,5 +4,76 @@
   3. Run main: =cd bin && ./main=
   4. Run tests: =cd bin && ./unit_test=
 * Features
-  - Supports all R5RS [[www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_2.1][identifiers]]
-  - Character [[http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_6.3.4][literals]]
+  - [X] Supports all R5RS [[www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_2.1][identifiers]]
+  - [X] Character [[http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_6.3.4][literals]]
+  - [X] quote
+  - [X] Bool
+  - [X] Comments (Does not work with commented parenthesis)
+  - [ ] Numbers with +/-
+  - [ ] Backquote
+  - [ ] Vector
+** Primitive Expression
+   - [X] define
+   - [X] quote
+   - [X] lambda
+   - [X] procedure call
+   - [ ] if
+   - [ ] set!
+** TODO Derived Expression
+   With define-syntax or as primitives in List::eval?
+   - [ ] cond
+   - [ ] case
+   - [ ] and
+   - [ ] or
+   - [ ] let, let*, letrec
+   - [ ] begin
+   - [ ] do
+   - [ ] named let
+   - [ ] delay + force
+   - [ ] quasiquote
+** Macros
+** Procedures
+   - [ ] read
+   - [ ] write
+   - [ ] eqv?
+   - [ ] eq?
+   - [ ] equal=
+*** Math
+   - [ ] +
+   - [ ] - 
+   - [ ] *
+   - [ ] quotient 
+   - [ ] remainder 
+   - [ ] modulo
+   - [ ] max min abs
+   - [ ] numerator 
+   - [ ] denominator 
+   - [ ] gcd
+   - [ ] lcm 
+   - [ ] floor 
+   - [ ] ceiling
+   - [ ] truncate
+   - [ ] round 
+   - [ ] rationalize
+   - [ ] expt
+*** Numerical
+    - [ ] =
+    - [ ] <
+    - [ ] >
+    - [ ] <=
+    - [ ] >=
+    - [ ] number?
+    - [ ] complex?
+    - [ ] real?
+    - [ ] rational?
+    - [ ] integer?
+    - [ ] zero?
+    - [ ] positive?
+    - [ ] negative?
+    - [ ] odd?
+    - [ ] even?
+    - [ ] min
+    - [ ] max
+    - [ ] ...
+** TODO Proper tail recursion
+   - trampoline, continuation passing

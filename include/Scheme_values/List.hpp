@@ -8,6 +8,7 @@
 #include <vector>
 
 class Scheme_value;
+class Environment;
 
 class List
 {
@@ -16,11 +17,14 @@ public:
   explicit List(std::vector<std::unique_ptr<Scheme_value>>& list);
 
   List(const List&);
+  List& operator=(const List&);
   // List(List&&) = default;
-  // List& operator=(const List&) = default;
   // List& operator=(List&&) = default;
 
   std::string as_string();
+  Scheme_value eval(Environment& env);
+
+  const std::vector<std::unique_ptr<Scheme_value>>& get_list() const;
 
 private:
   std::vector<std::unique_ptr<Scheme_value>> list;
