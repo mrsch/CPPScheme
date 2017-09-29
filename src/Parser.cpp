@@ -94,7 +94,7 @@ std::optional<Vector> parse_vector(std::string& expr)
 std::optional<Atom> parse_atom(std::string& expr)
 {
   if (std::isalpha(expr[0]) || is_symbol(expr[0])) {
-    return Atom(substr_and_remove(expr, expr.find_first_of(" )")));
+    return Atom(substr_and_remove(expr, expr.find_first_of(" )\n")));
   } else {
     return {};
   }

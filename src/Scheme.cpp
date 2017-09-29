@@ -65,10 +65,12 @@ void Scheme::build_default_environment()
 {
   default_env->add_to_env("apply", Scheme_value(Built_in(apply)));
   default_env->add_to_env("eval", Scheme_value(Built_in(eval)));
+  default_env->add_to_env("eqv?", Scheme_value(Built_in(eqv)));
   default_env->add_to_env("+", Scheme_value(Built_in(add)));
   default_env->add_to_env("-", Scheme_value(Built_in(sub)));
   default_env->add_to_env("*", Scheme_value(Built_in(mul)));
   default_env->add_to_env("/", Scheme_value(Built_in(divide)));
+  default_env->add_to_env("modulo", Scheme_value(Built_in(modulo)));
   default_env->add_to_env("car", Scheme_value(Built_in(car)));
   default_env->add_to_env("cdr", Scheme_value(Built_in(cdr)));
   default_env->add_to_env("cons", Scheme_value(Built_in(cons)));

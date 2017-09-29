@@ -4,13 +4,6 @@
   3. Run main: =cd bin && ./main=
   4. Run tests: =cd bin && ./unit_test=
 * Features
-  - [X] Supports all R5RS [[www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_2.1][identifiers]]
-  - [X] Character [[http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%25_toc_%25_sec_6.3.4][literals]]
-  - [X] quote
-  - [X] Bool
-  - [X] Comments (Does not work with commented parenthesis)
-  - [X] Vector
-  - [X] Numbers with +/-
   - [ ] Backquote
 ** Primitive Expression
    - [X] define
@@ -32,7 +25,7 @@
    - [ ] delay + force
    - [ ] quasiquote
 ** Macros
-** Procedures
+** Standard Procedures
    - [X] apply
    - [X] eval
    - [X] car
@@ -41,13 +34,15 @@
    - [ ] eqv?
    - [ ] eq?
    - [ ] equal=
+*** Booleans
+   - [X] not
 *** Math
    - [X] +
    - [X] - 
    - [X] *
    - [X] / 
+   - [X] modulo
    - [ ] remainder 
-   - [ ] modulo
    - [ ] max min abs
    - [ ] numerator 
    - [ ] denominator 
@@ -70,13 +65,28 @@
     - [ ] real?
     - [ ] rational?
     - [ ] integer?
-    - [ ] zero?
-    - [ ] positive?
-    - [ ] negative?
-    - [ ] odd?
-    - [ ] even?
+    - [X] zero?
+    - [X] positive?
+    - [X] negative?
+    - [X] odd?
+    - [X] even?
     - [ ] min
     - [ ] max
     - [ ] ...
+*** Lists
+    - [X] null?
+    - [X] length
+    - [X] reverse
+    - [X] map (only 1 list)
+** Additional Procedures
+   - [X] curry
+   - [X] id
+   - [X] flip
+   - [X] compose
+   - [X] folds (foldl foldr)
+   - [X] unfold
+   - [X] sum
+   - [X] product
+   - [X] filter
 ** TODO Proper tail recursion
    - trampoline, continuation passing

@@ -9,7 +9,11 @@
 // Equivalence predicated
 ////////////////////////////////////////////////////////////////////////////////
 
-// TODO:
+inline Scheme_value eqv(const std::vector<Scheme_value>& args,
+                        const std::shared_ptr<Environment>&)
+{
+  return Scheme_value(Bool(args[0].as_string() == args[1].as_string()));
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // List
@@ -144,6 +148,15 @@ inline Scheme_value divide(const std::vector<Scheme_value>& args,
   }
 
   return Scheme_value(Number(res));
+}
+
+inline Scheme_value modulo(const std::vector<Scheme_value>& args,
+                           const std::shared_ptr<Environment>&)
+{
+  int x = args[0].get_value<Number>().value().get_number();
+  int y = args[1].get_value<Number>().value().get_number();
+
+  return Scheme_value(Number(x % y));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
