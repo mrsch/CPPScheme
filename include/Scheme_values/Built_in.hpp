@@ -8,7 +8,8 @@
 class Scheme_value;
 class Environment;
 
-using Procedure = std::function<Scheme_value(const std::vector<Scheme_value>&)>;
+using Procedure = std::function<Scheme_value(
+  const std::vector<Scheme_value>&, const std::shared_ptr<Environment>&)>;
 
 class Built_in
 {

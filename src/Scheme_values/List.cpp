@@ -2,6 +2,7 @@
 
 #include "Environment.hpp"
 #include "Scheme_values/Scheme_value.hpp"
+#include <fmt/format.h>
 
 List::List(const std::vector<Scheme_value>& list) : list(list)
 {
@@ -53,10 +54,29 @@ Scheme_value List::eval(const std::shared_ptr<Environment>& env)
 
       return Scheme_value{
         Lambda(list[1].get_value<List>().value(), body_expressions, env)};
-    } else if (atom.as_string() == "if") { // TODO: Conditional
-      return Scheme_value{};
-    } else if (atom.as_string() == "set!") { // TODO: assignment
-      return Scheme_value{};
+    } else if (atom.as_string() == "if") {
+      auto cond = list[1].eval(env);
+      auto value = true;
+      if (auto b = cond.get_value<Bool>(); b.has_value()) {
+        value = b.value().get_bool();
+      }
+
+      if (value) {
+        return list[2].eval(env);
+      } else {
+        return list[3].eval(env);
+      }
+
+    } else if (atom.as_string() == "set!") {
+      if (env->get(list[1].as_string()).has_value()) {
+        env->add_to_env(list[1].get_value<Atom>().value().as_string(),
+                        list[2].eval(env));
+
+        return Scheme_value{list[1]};
+      } else {
+        fmt::print("Unbound varable: {}\n", list[1].as_string());
+        return Scheme_value{};
+      }
     } else if (auto maybe_procedure = env->get(atom.as_string());
                maybe_procedure.has_value()) {
       auto procedure = maybe_procedure.value();

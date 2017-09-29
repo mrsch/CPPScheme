@@ -3,7 +3,7 @@
 #include "Environment.hpp"
 #include "Scheme_values/Scheme_value.hpp"
 
-Number::Number(int number) : number(number)
+Number::Number(float number) : number(number)
 {
 }
 

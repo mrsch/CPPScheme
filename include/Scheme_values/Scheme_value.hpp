@@ -10,6 +10,7 @@
 #include "Scheme_values/Nil.hpp"
 #include "Scheme_values/Number.hpp"
 #include "Scheme_values/String.hpp"
+#include "Scheme_values/Vector.hpp"
 
 #include <optional>
 #include <string>
@@ -19,8 +20,16 @@ class Environment;
 
 class Scheme_value
 {
-  using Value = std::
-    variant<Nil, Atom, List, String, Character, Number, Bool, Lambda, Built_in>;
+  using Value = std::variant<Nil,
+                             Atom,
+                             List,
+                             String,
+                             Character,
+                             Number,
+                             Bool,
+                             Lambda,
+                             Built_in,
+                             Vector>;
 
 public:
   Scheme_value() = default;

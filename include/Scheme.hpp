@@ -20,8 +20,9 @@ public:
 
 private:
   std::shared_ptr<Environment> default_env;
-
   void build_default_environment();
+
+  std::string read();
 };
 
 #endif // SCHEME_HPP

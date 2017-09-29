@@ -1,10 +1,32 @@
 #include "Scheme.hpp"
 
 #include "Procedures.hpp"
+#include <fstream>
 
 Scheme::Scheme() : default_env(std::make_shared<Environment>())
 {
   build_default_environment();
+  std::ifstream stdlib;
+
+  stdlib.open("stdlib.scm", std::ios::in);
+  if (!stdlib.is_open()) {
+    stdlib.open("resources/stdlib.scm", std::ios::in);
+  }
+  if (!stdlib.is_open()) {
+    stdlib.open("../resources/stdlib.scm", std::ios::in);
+  }
+
+  if (stdlib.is_open()) {
+    std::string program;
+    std::string line;
+    while (getline(stdlib, line)) {
+      program += line;
+    }
+
+    while (program.size() != 0) {
+      parse(program).eval(default_env);
+    }
+  }
 }
 
 void Scheme::start_repl()
@@ -44,5 +66,6 @@ void Scheme::start_repl()
 
 void Scheme::build_default_environment()
 {
+  default_env->add_to_env("eval", Scheme_value(Built_in(eval)));
   default_env->add_to_env("+", Scheme_value(Built_in(add)));
 }

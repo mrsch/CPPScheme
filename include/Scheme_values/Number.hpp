@@ -10,18 +10,18 @@ class Environment;
 class Number
 {
 public:
-  explicit Number(int number);
+  explicit Number(float number);
 
   std::string as_string() const;
   Scheme_value eval(const std::shared_ptr<Environment>& env);
 
-  int get_number() const
+  float get_number() const
   {
     return number;
   }
 
 private:
-  int number;
+  float number;
 };
 
 #endif // SCHEME_VALUES_NUMBER_HPP

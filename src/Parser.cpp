@@ -7,7 +7,7 @@
 #include <iostream>
 #include <optional>
 
-static std::string symbols = "!$%&|*+-./:<=>?@^_~";
+static std::string symbols = "!$%&|*.+-/:<=>?@^_~";
 
 bool is_symbol(char c)
 {
@@ -19,9 +19,11 @@ Scheme_value parse(std::string& expr)
   while (expr.size() != 0) {
     trim(expr);
 
-    if (auto res = parse_atom(expr); res.has_value()) {
+    if (auto res = parse_number(expr); res.has_value()) {
       return Scheme_value(res.value());
-    } else if (auto res = parse_number(expr); res.has_value()) {
+    } else if (auto res = parse_atom(expr); res.has_value()) {
+      return Scheme_value(res.value());
+    } else if (auto res = parse_vector(expr); res.has_value()) {
       return Scheme_value(res.value());
     } else if (auto res = parse_string(expr); res.has_value()) {
       return Scheme_value(res.value());
@@ -67,6 +69,23 @@ std::optional<List> parse_list(std::string& expr)
     trim(expr);
 
     return List(list);
+  }
+
+  return {};
+}
+
+std::optional<Vector> parse_vector(std::string& expr)
+{
+  if (expr[0] == '#' && expr[1] == '(') {
+    expr.erase(0, 2);
+    std::vector<Scheme_value> vector;
+    while (expr[0] != ')') {
+      vector.emplace_back(Scheme_value(parse(expr)));
+    }
+    expr.erase(0, 1);
+    trim(expr);
+
+    return Vector(vector);
   }
 
   return {};
@@ -130,8 +149,9 @@ std::optional<String> parse_string(std::string& expr)
 // FIXME: More number types (hex oct float ...)
 std::optional<Number> parse_number(std::string& expr)
 {
-  if (std::isdigit(expr[0])) {
-    return Number(std::stoi(substr_and_remove(expr, expr.find_first_of(" )"))));
+  if (std::isdigit(expr[0])
+      || ((expr[0] == '+' || expr[0] == '-') && std::isdigit(expr[1]))) {
+    return Number(std::stof(substr_and_remove(expr, expr.find_first_of(" )"))));
   } else {
     return {};
   }

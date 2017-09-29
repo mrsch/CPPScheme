@@ -16,3 +16,8 @@ std::string Bool::as_string()
 {
   return b ? "#t" : "#f";
 }
+
+bool Bool::get_bool() const
+{
+  return b;
+}

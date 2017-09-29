@@ -16,6 +16,7 @@ add_library(scheme-lib
   Scheme_values/Nil.cpp
   Scheme_values/Number.cpp
   Scheme_values/String.cpp
+  Scheme_values/Vector.cpp
   Utils.cpp
   )
 

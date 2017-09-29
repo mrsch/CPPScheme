@@ -15,6 +15,8 @@ public:
   std::string as_string();
   Scheme_value eval(const std::shared_ptr<Environment>& env);
 
+  bool get_bool() const;
+
 private:
   bool b;
 };

@@ -7,6 +7,7 @@
 #include "Scheme_values/List.hpp"
 #include "Scheme_values/Number.hpp"
 #include "Scheme_values/String.hpp"
+#include "Scheme_values/Vector.hpp"
 
 #include <optional>
 #include <string>
@@ -20,6 +21,7 @@ std::optional<String> parse_string(std::string& expr);
 std::optional<List> parse_list(std::string& expr);
 std::optional<List> parse_specials(std::string& expr);
 std::optional<Number> parse_number(std::string& expr);
+std::optional<Vector> parse_vector(std::string& expr);
 void parse_comment(std::string& expr);
 
 #endif // PARSER_HPP
