@@ -26,12 +26,6 @@ std::string List::as_string()
   return res;
 }
 
-// Special Forms:
-// - define
-// - if
-// - quote
-// - set!
-// - lambda
 Scheme_value List::eval(const std::shared_ptr<Environment>& env)
 {
   if (list.size() == 0) {
@@ -88,6 +82,31 @@ Scheme_value List::eval(const std::shared_ptr<Environment>& env)
         return list[3].eval(env);
       }
 
+    } else if (atom.as_string() == "cond") {
+      list.erase(list.begin());
+      for (auto& maybe_clause : list) {
+        auto clause = maybe_clause.get_value<List>().value();
+        auto clause_list = clause.get_list();
+        auto cond = clause_list[0];
+
+        bool eval_expressions = false;
+        if (auto atom = cond.get_value<Atom>(); atom.has_value()) {
+          if (atom.value().as_string() == "else") {
+            eval_expressions = true;
+          }
+        } else if (cond.eval(env).get_value<Bool>().value().get_bool()) {
+          eval_expressions = true;
+        }
+
+        if (eval_expressions) {
+          Scheme_value res;
+          for (int i = 1; i < clause_list.size(); ++i) {
+            res = clause_list[i].eval(env);
+          }
+
+          return res;
+        }
+      }
     } else if (atom.as_string() == "set!") {
       if (env->get(list[1].as_string()).has_value()) {
         env->add_to_env(list[1].get_value<Atom>().value().as_string(),
