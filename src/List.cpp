@@ -3,32 +3,15 @@
 #include "Environment.hpp"
 #include "Scheme_value.hpp"
 
-List::List(std::vector<std::unique_ptr<Scheme_value>>& list)
-  : list(std::move(list))
+List::List(const std::vector<Scheme_value>& list) : list(list)
 {
-}
-
-List::List(const List& other)
-{
-  for (auto& e : other.list) {
-    list.emplace_back(std::make_unique<Scheme_value>(*e));
-  }
-}
-
-List& List::operator=(const List& other)
-{
-  list.clear();
-  for (auto& e : other.list) {
-    list.emplace_back(std::make_unique<Scheme_value>(*e));
-  }
-  return *this;
 }
 
 std::string List::as_string()
 {
   std::string res = "(";
   for (auto& e : list) {
-    res += e->as_string() + " ";
+    res += e.as_string() + " ";
   }
   res.erase(res.length() - 1, 1);
   res += ")";
@@ -49,27 +32,27 @@ Scheme_value List::eval(Environment& env)
   }
 
   // Get first element in list
-  auto first = list[0].get();
+  auto first = list[0];
 
-  if (auto maybe_atom = first->get_value<Atom>(); maybe_atom.has_value()) {
+  if (auto maybe_atom = first.get_value<Atom>(); maybe_atom.has_value()) {
     auto atom = maybe_atom.value();
 
     // Primitive Expressions
     if (atom.as_string() == "define") {
-      env.add_to_env(list[1]->get_value<Atom>().value().as_string(),
-                     list[2]->eval(env));
+      env.add_to_env(list[1].get_value<Atom>().value().as_string(),
+                     list[2].eval(env));
 
-      return Scheme_value{*list[1].get()};
+      return Scheme_value{list[1]};
     } else if (atom.as_string() == "quote") {
-      return Scheme_value{*list[1].get()};
+      return Scheme_value{list[1]};
     } else if (atom.as_string() == "lambda") {
       std::vector<Scheme_value> body_expressions;
       for (size_t i = 2; i < list.size(); ++i) {
-        body_expressions.emplace_back(*list[i]);
+        body_expressions.emplace_back(list[i]);
       }
 
       return Scheme_value{
-        Lambda(list[1]->get_value<List>().value(), body_expressions, env)};
+        Lambda(list[1].get_value<List>().value(), body_expressions, env)};
     } else if (atom.as_string() == "if") { // TODO: Conditional
       return Scheme_value{};
     } else if (atom.as_string() == "set!") { // TODO: assignment
@@ -80,12 +63,11 @@ Scheme_value List::eval(Environment& env)
       list.erase(list.begin());
       return lambda.get_value<Lambda>().value().execute(env, *this);
     }
-
-    return Scheme_value{};
   }
+  return Scheme_value{};
 }
 
-const std::vector<std::unique_ptr<Scheme_value>>& List::get_list() const
+const std::vector<Scheme_value>& List::get_list() const
 {
   return list;
 }

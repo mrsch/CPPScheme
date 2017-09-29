@@ -13,21 +13,15 @@ class Environment;
 class List
 {
 public:
-  List() = default;
-  explicit List(std::vector<std::unique_ptr<Scheme_value>>& list);
-
-  List(const List&);
-  List& operator=(const List&);
-  // List(List&&) = default;
-  // List& operator=(List&&) = default;
+  explicit List(const std::vector<Scheme_value>& list);
 
   std::string as_string();
   Scheme_value eval(Environment& env);
 
-  const std::vector<std::unique_ptr<Scheme_value>>& get_list() const;
+  const std::vector<Scheme_value>& get_list() const;
 
 private:
-  std::vector<std::unique_ptr<Scheme_value>> list;
+  std::vector<Scheme_value> list;
 };
 
 #endif // SCHEME_VALUES_LIST_HPP

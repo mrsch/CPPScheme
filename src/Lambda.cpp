@@ -28,15 +28,15 @@ std::string Lambda::as_string()
   return result;
 }
 
-Scheme_value Lambda::execute(Environment& env, List args)
+Scheme_value Lambda::execute(Environment& env, List args) const
 {
   // TODO: Switch for dynamic/lexical scoping
   Environment temp_env(*closure);
 
   auto& list = arg_list.get_list();
   for (size_t i = 0; i < list.size(); ++i) {
-    auto evaled_arg = args.get_list()[i]->eval(env);
-    temp_env.add_to_env(list[i]->as_string(), evaled_arg);
+    auto evaled_arg = args.get_list()[i].eval(env);
+    temp_env.add_to_env(list[i].as_string(), evaled_arg);
   }
 
   Scheme_value result;

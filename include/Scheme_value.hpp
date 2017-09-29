@@ -41,8 +41,8 @@ public:
     }
   }
 
-  std::string as_string();
-  Scheme_value eval(Environment& env);
+  std::string as_string() const;
+  Scheme_value eval(Environment& env) const;
 
 private:
   Value value = Nil();

@@ -16,7 +16,7 @@ public:
 
   std::string as_string();
   Scheme_value eval(Environment& env);
-  Scheme_value execute(Environment& env, List args);
+  Scheme_value execute(Environment& env, List args) const;
 
 private:
   List arg_list;

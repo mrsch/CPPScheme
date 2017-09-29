@@ -37,15 +37,17 @@ Scheme_value parse(std::string& expr)
       parse_comment(expr);
     }
   }
+
+  return Scheme_value();
 }
 
 std::optional<List> parse_specials(std::string& expr)
 {
   if (expr[0] == '\'') {
     expr.erase(0, 1);
-    std::vector<std::unique_ptr<Scheme_value>> list;
-    list.emplace_back(std::make_unique<Scheme_value>(Atom("quote")));
-    list.emplace_back(std::make_unique<Scheme_value>(parse(expr)));
+    std::vector<Scheme_value> list;
+    list.emplace_back(Scheme_value(Atom("quote")));
+    list.emplace_back(Scheme_value(parse(expr)));
 
     return List(list);
   }
@@ -57,9 +59,9 @@ std::optional<List> parse_list(std::string& expr)
 {
   if (expr[0] == '(') {
     expr.erase(0, 1);
-    std::vector<std::unique_ptr<Scheme_value>> list;
+    std::vector<Scheme_value> list;
     while (expr[0] != ')') {
-      list.emplace_back(std::make_unique<Scheme_value>(parse(expr)));
+      list.emplace_back(Scheme_value(parse(expr)));
     }
     expr.erase(0, 1);
     trim(expr);

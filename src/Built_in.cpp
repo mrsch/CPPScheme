@@ -21,7 +21,7 @@ Scheme_value Built_in::execute(Environment& env, List args)
 {
   std::vector<Scheme_value> evaled_args;
   for (auto& arg : args.get_list()) {
-    evaled_args.emplace_back(arg->eval(env));
+    evaled_args.emplace_back(arg.eval(env));
   }
   return proc(evaled_args);
 }
