@@ -1,8 +1,10 @@
 #include "Scheme_values/List.hpp"
 
 #include "Environment.hpp"
+#include "Parser.hpp"
 #include "Scheme_values/Scheme_value.hpp"
 #include <fmt/format.h>
+#include <fstream>
 
 List::List(const std::vector<Scheme_value>& list) : list(list)
 {
@@ -36,10 +38,7 @@ Scheme_value List::eval(const std::shared_ptr<Environment>& env)
     return Scheme_value{*this};
   }
 
-  // Get first element in list
-  auto first = list[0];
-
-  if (auto maybe_atom = first.get_value<Atom>(); maybe_atom.has_value()) {
+  if (auto maybe_atom = list[0].get_value<Atom>(); maybe_atom.has_value()) {
     auto atom = maybe_atom.value();
 
     // Primitive Expressions
@@ -99,6 +98,24 @@ Scheme_value List::eval(const std::shared_ptr<Environment>& env)
         fmt::print("Unbound varable: {}\n", list[1].as_string());
         return Scheme_value{};
       }
+    } else if (atom.as_string() == "load") { // load has to be here because it
+                                             // has to be executed in the root
+                                             // Environment
+      std::ifstream source;
+
+      source.open(list[1].get_value<String>().value().get_string(),
+                  std::ios::in);
+
+      if (source.is_open()) {
+        std::string program((std::istreambuf_iterator<char>(source)),
+                            std::istreambuf_iterator<char>());
+
+        while (program.size() != 0) {
+          parse(program).eval(env);
+        }
+      }
+
+      return Scheme_value();
     } else if (auto maybe_procedure = env->get(atom.as_string());
                maybe_procedure.has_value()) {
       auto procedure = maybe_procedure.value();

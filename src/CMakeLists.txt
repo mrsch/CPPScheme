@@ -23,7 +23,8 @@ add_library(scheme-lib
 target_link_libraries(scheme-lib
   PUBLIC
   PRIVATE
-  fmt::fmt-header-only)
+  fmt::fmt-header-only
+  stdc++fs)
 
 target_include_directories(scheme-lib
   PUBLIC

@@ -1,29 +1,30 @@
 #include "Scheme.hpp"
 
 #include "Procedures.hpp"
+#include <experimental/filesystem>
 #include <fstream>
+
+namespace fs = std::experimental::filesystem;
 
 Scheme::Scheme() : default_env(std::make_shared<Environment>())
 {
   build_default_environment();
   std::ifstream stdlib;
 
-  stdlib.open("stdlib.scm", std::ios::in);
-  if (!stdlib.is_open()) {
-    stdlib.open("resources/stdlib.scm", std::ios::in);
-  }
-  if (!stdlib.is_open()) {
-    stdlib.open("../resources/stdlib.scm", std::ios::in);
-  }
+  if (fs::exists("stdlib.scm")) {
+    std::string load = "(load \"stdlib.scm\")";
+    parse(load).eval(default_env);
+  };
 
-  if (stdlib.is_open()) {
-    std::string program((std::istreambuf_iterator<char>(stdlib)),
-                        std::istreambuf_iterator<char>());
+  if (fs::exists("resources/stdlib.scm")) {
+    std::string load = "(load \"resources/stdlib.scm\")";
+    parse(load).eval(default_env);
+  };
 
-    while (program.size() != 0) {
-      parse(program).eval(default_env);
-    }
-  }
+  if (fs::exists("../resources/stdlib.scm")) {
+    std::string load = "(load \"../resources/stdlib.scm\")";
+    parse(load).eval(default_env);
+  };
 }
 
 void Scheme::start_repl()

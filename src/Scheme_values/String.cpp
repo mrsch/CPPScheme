@@ -15,3 +15,8 @@ Scheme_value String::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{*this};
 }
+
+std::string String::get_string() const
+{
+  return str;
+}

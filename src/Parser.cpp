@@ -133,12 +133,11 @@ std::optional<Bool> parse_bool(std::string& expr)
   }
 }
 
-// FIXME: Handle escaped characters e.g. \"
 std::optional<String> parse_string(std::string& expr)
 {
-  if (expr[0] == '"') {
+  if (expr.find("\"") == 0) {
     expr.erase(0, 1);
-    auto pos = expr.find_first_of('"');
+    auto pos = expr.find("\"");
     expr.erase(pos, 1);
     return String(substr_and_remove(expr, pos));
   }
