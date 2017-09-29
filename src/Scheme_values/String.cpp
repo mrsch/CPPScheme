@@ -1,6 +1,6 @@
 #include "Scheme_values/String.hpp"
 
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 String::String(const std::string& str) : str(str)
 {

@@ -1,7 +1,7 @@
 #include "Scheme_values/Lambda.hpp"
 
 #include "Environment.hpp"
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 Lambda::Lambda(List arg_list,
                const std::vector<Scheme_value>& body_expressions,

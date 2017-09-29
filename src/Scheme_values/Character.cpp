@@ -1,7 +1,7 @@
 #include "Scheme_values/Character.hpp"
 
 #include "Environment.hpp"
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 Character::Character(char c) : value(c)
 {

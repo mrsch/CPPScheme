@@ -1,7 +1,7 @@
 #include "Scheme_values/Bool.hpp"
 
 #include "Environment.hpp"
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 Bool::Bool(bool b) : b(b)
 {

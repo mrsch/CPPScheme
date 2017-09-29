@@ -1,7 +1,7 @@
 #ifndef PROCEDURES_HPP
 #define PROCEDURES_HPP
 
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 inline Scheme_value add(const std::vector<Scheme_value>& args)
 {

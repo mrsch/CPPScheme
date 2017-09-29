@@ -3,19 +3,19 @@
 ## #################################################################
 
 add_library(scheme-lib
-  Atom.cpp
-  Bool.cpp
-  Built_in.cpp
-  Character.cpp
   Environment.cpp
-  Lambda.cpp
-  List.cpp
-  Nil.cpp
-  Number.cpp
   Parser.cpp
-  Scheme_value.cpp
   Scheme.cpp
-  String.cpp
+  Scheme_values/Scheme_value.cpp
+  Scheme_values/Atom.cpp
+  Scheme_values/Bool.cpp
+  Scheme_values/Built_in.cpp
+  Scheme_values/Character.cpp
+  Scheme_values/Lambda.cpp
+  Scheme_values/List.cpp
+  Scheme_values/Nil.cpp
+  Scheme_values/Number.cpp
+  Scheme_values/String.cpp
   Utils.cpp
   )
 

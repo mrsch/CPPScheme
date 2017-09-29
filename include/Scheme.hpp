@@ -6,7 +6,7 @@
 
 #include "Environment.hpp"
 #include "Parser.hpp"
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 #include <algorithm>
 #include <editline/readline.h>

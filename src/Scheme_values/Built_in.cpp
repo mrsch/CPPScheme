@@ -1,7 +1,7 @@
 #include "Scheme_values/Built_in.hpp"
 
 #include "Environment.hpp"
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 Built_in::Built_in(Procedure proc) : proc(proc)
 {

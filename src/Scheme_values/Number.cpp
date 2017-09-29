@@ -1,7 +1,7 @@
 #include "Scheme_values/Number.hpp"
 
 #include "Environment.hpp"
-#include "Scheme_value.hpp"
+#include "Scheme_values/Scheme_value.hpp"
 
 Number::Number(int number) : number(number)
 {
