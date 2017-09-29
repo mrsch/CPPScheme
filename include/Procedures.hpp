@@ -3,7 +3,7 @@
 
 #include "Scheme_value.hpp"
 
-Scheme_value add(const std::vector<Scheme_value>& args)
+inline Scheme_value add(const std::vector<Scheme_value>& args)
 {
   int sum = 0;
   for (auto& arg : args) {
@@ -13,16 +13,16 @@ Scheme_value add(const std::vector<Scheme_value>& args)
   return Scheme_value(Number(sum));
 }
 
-Scheme_value car(const std::vector<Scheme_value>& args)
+inline Scheme_value car(const std::vector<Scheme_value>& args)
 {
   return args[0];
 }
 
-Scheme_value cdr(const std::vector<Scheme_value>& args)
-{
-  auto result = std::vector<Scheme_value>(args.begin() + 1, args.end());
-  // return Scheme_value(List(result));
-}
+  // Scheme_value cdr(const std::vector<Scheme_value>& args)
+  // {
+  //   auto result = std::vector<Scheme_value>(args.begin() + 1, args.end());
+  //   return Scheme_value(List(result));
+  // }
 
   // Scheme_value gt(const std::vector<Scheme_value>& args)
   // {

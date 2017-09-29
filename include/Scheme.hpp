@@ -19,7 +19,7 @@ public:
   void start_repl();
 
 private:
-  Environment default_env;
+  std::shared_ptr<Environment> default_env;
 
   void build_default_environment();
 };

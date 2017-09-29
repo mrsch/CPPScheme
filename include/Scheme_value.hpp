@@ -42,7 +42,7 @@ public:
   }
 
   std::string as_string() const;
-  Scheme_value eval(Environment& env) const;
+  Scheme_value eval(const std::shared_ptr<Environment>& env) const;
 
 private:
   Value value = Nil();

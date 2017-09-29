@@ -7,7 +7,7 @@ Built_in::Built_in(Procedure proc) : proc(proc)
 {
 }
 
-Scheme_value Built_in::eval(Environment& /* env */)
+Scheme_value Built_in::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{String("Built-in procedure")};
 }
@@ -17,7 +17,8 @@ std::string Built_in::as_string()
   return "Built-in procedure";
 }
 
-Scheme_value Built_in::execute(Environment& env, List args)
+Scheme_value Built_in::execute(const std::shared_ptr<Environment>& env,
+                               List args)
 {
   std::vector<Scheme_value> evaled_args;
   for (auto& arg : args.get_list()) {

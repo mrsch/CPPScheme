@@ -1,6 +1,8 @@
 #include "Scheme.hpp"
 
-Scheme::Scheme()
+#include "Procedures.hpp"
+
+Scheme::Scheme() : default_env(std::make_shared<Environment>())
 {
   build_default_environment();
 }
@@ -8,7 +10,6 @@ Scheme::Scheme()
 void Scheme::start_repl()
 {
   std::string next;
-  Environment env;
 
   while (true) {
     if (next.length() == 0) {
@@ -34,7 +35,7 @@ void Scheme::start_repl()
     add_history(next.c_str());
 
     auto res = parse(next);
-    res = res.eval(env);
+    res = res.eval(default_env);
     next = "";
 
     std::cout << res.as_string() << '\n';
@@ -43,5 +44,5 @@ void Scheme::start_repl()
 
 void Scheme::build_default_environment()
 {
-  // TODO:
+  default_env->add_to_env("+", Scheme_value(Built_in(add)));
 }

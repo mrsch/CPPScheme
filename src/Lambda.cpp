@@ -5,12 +5,12 @@
 
 Lambda::Lambda(List arg_list,
                const std::vector<Scheme_value>& body_expressions,
-               Environment& closure)
-  : arg_list(arg_list), body_expressions(body_expressions), closure(&closure)
+               const std::shared_ptr<Environment>& closure)
+  : arg_list(arg_list), body_expressions(body_expressions), closure(closure)
 {
 }
 
-Scheme_value Lambda::eval(Environment& /* env */)
+Scheme_value Lambda::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{String("Defined lambda")};
 }
@@ -28,15 +28,16 @@ std::string Lambda::as_string()
   return result;
 }
 
-Scheme_value Lambda::execute(Environment& env, List args) const
+Scheme_value Lambda::execute(const std::shared_ptr<Environment>& env,
+                             List args) const
 {
   // TODO: Switch for dynamic/lexical scoping
-  Environment temp_env(*closure);
+  auto temp_env = std::make_shared<Environment>(closure);
 
   auto& list = arg_list.get_list();
   for (size_t i = 0; i < list.size(); ++i) {
     auto evaled_arg = args.get_list()[i].eval(env);
-    temp_env.add_to_env(list[i].as_string(), evaled_arg);
+    temp_env->add_to_env(list[i].as_string(), evaled_arg);
   }
 
   Scheme_value result;

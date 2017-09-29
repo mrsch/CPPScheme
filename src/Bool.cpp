@@ -7,7 +7,7 @@ Bool::Bool(bool b) : b(b)
 {
 }
 
-Scheme_value Bool::eval(Environment& /* env */)
+Scheme_value Bool::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{*this};
 }

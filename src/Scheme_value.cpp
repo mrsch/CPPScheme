@@ -13,7 +13,7 @@ struct Print_visitor {
 };
 
 struct Eval_visitor {
-  explicit Eval_visitor(Environment& env) : env(env){};
+  explicit Eval_visitor(const std::shared_ptr<Environment>& env) : env(env){};
 
   template <typename T>
   Scheme_value operator()(T value) const
@@ -22,7 +22,7 @@ struct Eval_visitor {
   }
 
 private:
-  Environment& env;
+  const std::shared_ptr<Environment>& env;
 };
 
 Scheme_value::Scheme_value(Value value) : value(value)
@@ -34,7 +34,7 @@ std::string Scheme_value::as_string() const
   return std::visit(Print_visitor{}, value);
 }
 
-Scheme_value Scheme_value::eval(Environment& env) const
+Scheme_value Scheme_value::eval(const std::shared_ptr<Environment>& env) const
 {
   return std::visit(Eval_visitor(env), value);
 }

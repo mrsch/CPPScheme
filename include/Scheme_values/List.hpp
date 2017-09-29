@@ -16,7 +16,7 @@ public:
   explicit List(const std::vector<Scheme_value>& list);
 
   std::string as_string();
-  Scheme_value eval(Environment& env);
+  Scheme_value eval(const std::shared_ptr<Environment>& env);
 
   const std::vector<Scheme_value>& get_list() const;
 

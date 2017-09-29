@@ -1,6 +1,7 @@
 #ifndef SCHEME_VALUES_BOOL_HPP
 #define SCHEME_VALUES_BOOL_HPP
 
+#include <memory>
 #include <string>
 
 class Scheme_value;
@@ -12,7 +13,7 @@ public:
   explicit Bool(bool b);
 
   std::string as_string();
-  Scheme_value eval(Environment& env);
+  Scheme_value eval(const std::shared_ptr<Environment>& env);
 
 private:
   bool b;

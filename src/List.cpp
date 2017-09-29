@@ -25,7 +25,7 @@ std::string List::as_string()
 // - quote
 // - set!
 // - lambda
-Scheme_value List::eval(Environment& env)
+Scheme_value List::eval(const std::shared_ptr<Environment>& env)
 {
   if (list.size() == 0) {
     return Scheme_value{*this};
@@ -39,8 +39,8 @@ Scheme_value List::eval(Environment& env)
 
     // Primitive Expressions
     if (atom.as_string() == "define") {
-      env.add_to_env(list[1].get_value<Atom>().value().as_string(),
-                     list[2].eval(env));
+      env->add_to_env(list[1].get_value<Atom>().value().as_string(),
+                      list[2].eval(env));
 
       return Scheme_value{list[1]};
     } else if (atom.as_string() == "quote") {
@@ -57,11 +57,17 @@ Scheme_value List::eval(Environment& env)
       return Scheme_value{};
     } else if (atom.as_string() == "set!") { // TODO: assignment
       return Scheme_value{};
-    } else if (auto maybe_lambda = env.get(atom.as_string());
-               maybe_lambda.has_value()) {
-      auto lambda = maybe_lambda.value();
+    } else if (auto maybe_procedure = env->get(atom.as_string());
+               maybe_procedure.has_value()) {
+      auto procedure = maybe_procedure.value();
       list.erase(list.begin());
-      return lambda.get_value<Lambda>().value().execute(env, *this);
+
+      if (auto lambda = procedure.get_value<Lambda>(); lambda.has_value()) {
+        return lambda.value().execute(env, *this);
+      } else if (auto built_in = procedure.get_value<Built_in>();
+                 built_in.has_value()) {
+        return built_in.value().execute(env, *this);
+      }
     }
   }
   return Scheme_value{};

@@ -16,8 +16,8 @@ public:
   explicit Built_in(Procedure proc);
 
   std::string as_string();
-  Scheme_value eval(Environment& env);
-  Scheme_value execute(Environment& env, List args);
+  Scheme_value eval(const std::shared_ptr<Environment>& env);
+  Scheme_value execute(const std::shared_ptr<Environment>& env, List args);
 
 private:
   Procedure proc;

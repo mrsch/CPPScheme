@@ -12,7 +12,7 @@ std::string Character::as_string() const
   return std::string(1, value);
 }
 
-Scheme_value Character::eval(Environment& /* env */)
+Scheme_value Character::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{*this};
 }
