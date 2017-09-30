@@ -54,11 +54,11 @@ void Scheme::start_repl()
 
     add_history(next.c_str());
 
-    auto res = parse(next);
-    res = res.eval(default_env);
+    auto res = parse(next).eval(default_env);
     next = "";
-
-    std::cout << res.as_string() << '\n';
+    if (res.has_value()) {
+      std::cout << res.value().as_string() << '\n';
+    }
   }
 }
 

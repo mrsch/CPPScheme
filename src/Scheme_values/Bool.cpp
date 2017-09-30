@@ -7,7 +7,7 @@ Bool::Bool(bool b) : b(b)
 {
 }
 
-Scheme_value Bool::eval(const Env_ptr& /* env */)
+Maybe<Scheme_value> Bool::eval(const Env_ptr& /* env */)
 {
   return Scheme_value{*this};
 }

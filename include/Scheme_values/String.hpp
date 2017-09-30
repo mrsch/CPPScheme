@@ -15,7 +15,7 @@ public:
   explicit String(const std::string& str);
 
   std::string as_string() const;
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
 
   std::string get_string() const;
 

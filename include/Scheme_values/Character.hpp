@@ -14,7 +14,7 @@ public:
   explicit Character(char c);
 
   std::string as_string() const;
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
 
 private:
   char value;

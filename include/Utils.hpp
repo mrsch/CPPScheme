@@ -1,11 +1,17 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include "Either.hpp"
+
 #include <algorithm>
 #include <memory>
 #include <optional>
 #include <string>
 #include <unordered_map>
+
+class Scheme_value;
+
+using Eval_result = Either<Scheme_value, std::string>;
 
 template <typename T>
 using Maybe = std::optional<T>;

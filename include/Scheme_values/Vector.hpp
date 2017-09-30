@@ -17,7 +17,7 @@ public:
   explicit Vector(const std::vector<Scheme_value>& vector);
 
   std::string as_string();
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
 
   const std::vector<Scheme_value>& get_vector() const;
 

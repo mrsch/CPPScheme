@@ -14,7 +14,7 @@ public:
   explicit Number(float number);
 
   std::string as_string() const;
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
 
   float get_number() const
   {

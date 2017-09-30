@@ -11,7 +11,7 @@ std::string String::as_string() const
   return "\"" + str + "\"";
 }
 
-Scheme_value String::eval(const std::shared_ptr<Environment>& /* env */)
+Maybe<Scheme_value> String::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{*this};
 }

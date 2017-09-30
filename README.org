@@ -2,6 +2,8 @@
   Scheme implementation in C++ that depends heavily on C++17s new
   =std::variant= and =std::optional=.
 
+  Uses Haskell-like Maybe and Either types.
+
   Tested with gcc 7.2.0 on Linux
 
 ** Setup

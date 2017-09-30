@@ -16,7 +16,7 @@ public:
          const Env_ptr& closure);
 
   std::string as_string();
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
   Scheme_value execute(const Env_ptr& env, List args) const;
 
 private:

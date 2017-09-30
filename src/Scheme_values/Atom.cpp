@@ -14,7 +14,7 @@ std::string Atom::as_string() const
   return name;
 }
 
-Scheme_value Atom::eval(const std::shared_ptr<Environment>& env)
+Maybe<Scheme_value> Atom::eval(const std::shared_ptr<Environment>& env)
 {
   if (auto res = env->get(name); res.has_value()) {
     return res.value();

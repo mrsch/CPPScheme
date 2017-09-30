@@ -14,7 +14,7 @@ public:
   Nil();
 
   std::string as_string();
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
 };
 
 #endif // SCHEME_VALUES_NIL_HPP

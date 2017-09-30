@@ -17,12 +17,14 @@ public:
   explicit List(const std::vector<Scheme_value>& list);
 
   std::string as_string();
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
 
   const std::vector<Scheme_value>& get_list() const;
 
 private:
   std::vector<Scheme_value> list;
+
+  Maybe<Scheme_value> eval_special_forms(Atom atom, const Env_ptr& env);
 };
 
 #endif // SCHEME_VALUES_LIST_HPP

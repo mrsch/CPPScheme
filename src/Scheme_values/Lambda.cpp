@@ -10,7 +10,7 @@ Lambda::Lambda(List arg_list,
 {
 }
 
-Scheme_value Lambda::eval(const std::shared_ptr<Environment>& /* env */)
+Maybe<Scheme_value> Lambda::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{String("Defined lambda")};
 }
@@ -37,13 +37,13 @@ Scheme_value Lambda::execute(const std::shared_ptr<Environment>& env,
   auto& list = arg_list.get_list();
   for (size_t i = 0; i < list.size(); ++i) {
     auto evaled_arg = args.get_list()[i].eval(env);
-    temp_env->add_to_env(list[i].as_string(), evaled_arg);
+    temp_env->add_to_env(list[i].as_string(), evaled_arg.value());
   }
 
-  Scheme_value result;
+  Maybe<Scheme_value> result;
   for (auto& body : body_expressions) {
     result = body.eval(temp_env);
   }
 
-  return result;
+  return result.value();
 }

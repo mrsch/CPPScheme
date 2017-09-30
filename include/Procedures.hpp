@@ -65,7 +65,7 @@ Scheme_value cdr(const std::vector<Scheme_value>& args, const Env_ptr&)
 inline Scheme_value eval(const std::vector<Scheme_value>& args,
                          const Env_ptr& env)
 {
-  return args[0].eval(env);
+  return args[0].eval(env).value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

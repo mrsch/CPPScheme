@@ -16,7 +16,7 @@ struct Eval_visitor {
   explicit Eval_visitor(const std::shared_ptr<Environment>& env) : env(env){};
 
   template <typename T>
-  Scheme_value operator()(T value) const
+  Maybe<Scheme_value> operator()(T value) const
   {
     return value.eval(env);
   }
@@ -34,7 +34,8 @@ std::string Scheme_value::as_string() const
   return std::visit(Print_visitor{}, value);
 }
 
-Scheme_value Scheme_value::eval(const std::shared_ptr<Environment>& env) const
+Maybe<Scheme_value>
+Scheme_value::eval(const std::shared_ptr<Environment>& env) const
 {
   return std::visit(Eval_visitor(env), value);
 }

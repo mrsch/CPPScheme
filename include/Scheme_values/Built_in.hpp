@@ -18,7 +18,7 @@ public:
   explicit Built_in(Procedure proc);
 
   std::string as_string();
-  Scheme_value eval(const Env_ptr& env);
+  Maybe<Scheme_value> eval(const Env_ptr& env);
   Scheme_value execute(const Env_ptr& env, List args);
 
 private:
