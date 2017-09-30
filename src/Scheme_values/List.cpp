@@ -135,19 +135,23 @@ Scheme_value List::eval(const std::shared_ptr<Environment>& env)
       }
 
       return Scheme_value();
-    } else if (auto maybe_procedure = env->get(atom.as_string());
-               maybe_procedure.has_value()) {
-      auto procedure = maybe_procedure.value();
-      list.erase(list.begin());
-
-      if (auto lambda = procedure.get_value<Lambda>(); lambda.has_value()) {
-        return lambda.value().execute(env, *this);
-      } else if (auto built_in = procedure.get_value<Built_in>();
-                 built_in.has_value()) {
-        return built_in.value().execute(env, *this);
-      }
     }
   }
+
+  // No Special syntax. Check for bindings
+  auto first = list[0].eval(env);
+  if (auto maybe_builtin = first.get_value<Built_in>();
+      maybe_builtin.has_value()) {
+    auto builtin = maybe_builtin.value();
+    list.erase(list.begin());
+    return builtin.execute(env, *this);
+  } else if (auto maybe_lambda = first.get_value<Lambda>();
+             maybe_lambda.has_value()) {
+    auto lambda = maybe_lambda.value();
+    list.erase(list.begin());
+    return lambda.execute(env, *this);
+  }
+
   return Scheme_value{};
 }
 

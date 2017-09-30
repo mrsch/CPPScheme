@@ -41,3 +41,11 @@
 ;; (define (or . lst) (fold || #f lst))
 ;; (define (max first . rest) (fold (lambda (old new) (if (> old new) old new)) first rest))
 ;; (define (min first . rest) (fold (lambda (old new) (if (< old new) old new)) first rest))
+
+;; Random functions
+(define (factorial n)
+ (cond ((< n 0) #f)
+         ((<= n 1) 1)
+         (else (* n (factorial (- n 1))))))
+
+(define (make-adder num) (lambda (arg) (+ arg num)))
