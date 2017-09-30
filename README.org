@@ -49,9 +49,9 @@
 *** Derived Expressions
     - [X] cond
     - [X] case
-    - [ ] and
-    - [ ] or
-    - [ ] let, let*, letrec
+    - [X] and
+    - [X] or
+    - [X] let
     - [ ] begin
     - [ ] do
     - [ ] named let
