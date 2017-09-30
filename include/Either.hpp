@@ -54,7 +54,7 @@ public:
   Either& right_map(const std::function<Right(Right)>& func)
   {
     if (std::holds_alternative<Left>(val)) {
-      val = func(std::get<Left>(val));
+      val = func(std::get<Right>(val));
     }
 
     return *this;

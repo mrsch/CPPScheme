@@ -5,6 +5,7 @@
 #include "Scheme_values/Scheme_value.hpp"
 #include <fmt/format.h>
 #include <fstream>
+#include <iostream>
 
 List::List(const std::vector<Scheme_value>& list) : list(list)
 {
@@ -28,22 +29,33 @@ std::string List::as_string()
 
 Eval_result List::eval(const std::shared_ptr<Environment>& env)
 {
-  if (list.size() == 0) { // Empty list return ()
+  if (list.size() == 0) { // Empty list, return ()
     return Scheme_value{*this};
   }
 
-  if (auto maybe_atom = list[0].get_value<Atom>()) { // Special Form
+  if (auto maybe_atom =
+        list[0].get_value<Atom>()) { // First check special forms
     auto maybe = eval_special_forms(*maybe_atom, env);
     if (maybe) {
       return *maybe;
+    } else {
+      // Check for error, if error message is empty continue to lambda+builtin
+      // evaluation
+      if (maybe.error() != "") {
+        return fmt::format("Could not evaluate special form: {}\nMessage: {}",
+                           as_string(),
+                           maybe.error());
+      }
     }
   }
 
-  // No Special syntax. Check for bindings
+  // No Special syntax. Check for lamba/bultin bindings
   auto first = list[0].eval(env);
 
   if (!first) {
-    // TODO: Handle error
+    return fmt::format("Could not evaluate expression: {}\nMessage: {}",
+                       as_string(),
+                       first.error());
   }
 
   if (auto maybe_builtin = first->get_value<Built_in>()) {
@@ -56,7 +68,7 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
     return lambda.execute(env, *this);
   }
 
-  return Scheme_value{};
+  return fmt::format("Could not evaluate expression: {}", as_string());
 }
 
 const std::vector<Scheme_value>& List::get_list() const
@@ -64,14 +76,22 @@ const std::vector<Scheme_value>& List::get_list() const
   return list;
 }
 
-Eval_result List::eval_special_forms(Atom atom, const Env_ptr& env)
+Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
 {
   // Primitive Expressions
   if (atom.as_string() == "define") {
+    if (list.size() != 3) {
+      return fmt::format(
+        "define requires exactly 2 arguments, {} given in Expression: {}",
+        list.size(),
+        as_string());
+    }
+
     if (auto atom = list[1].get_value<Atom>()) {
       auto result = list[2].eval(env);
       if (!result) {
         // TODO: Handle error
+        return result;
       }
 
       env->add_to_env(atom->as_string(), *result);
@@ -176,12 +196,15 @@ Eval_result List::eval_special_forms(Atom atom, const Env_ptr& env)
                           std::istreambuf_iterator<char>());
 
       while (program.size() != 0) {
-        parse(program).eval(env);
+        auto res = parse(program).eval(env);
+        if (!res) {
+          return res;
+        }
       }
     }
 
     return Scheme_value();
   }
 
-  return {std::string("No special form")};
+  return {std::string("")};
 }

@@ -16,10 +16,9 @@ std::string Atom::as_string() const
 
 Eval_result Atom::eval(const std::shared_ptr<Environment>& env)
 {
-  if (auto res = env->get(name); res.has_value()) {
-    return res.value();
+  if (auto res = env->get(name)) {
+    return *res;
   } else {
-    fmt::print("Atom \"{}\" is not defined.\n", name);
-    return Scheme_value{};
+    return fmt::format("Atom \"{}\" is not defined.\n", name);
   }
 }

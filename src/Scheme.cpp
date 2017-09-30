@@ -2,6 +2,7 @@
 
 #include "Procedures.hpp"
 #include <experimental/filesystem>
+#include <fmt/format.h>
 #include <fstream>
 
 namespace fs = std::experimental::filesystem;
@@ -58,6 +59,8 @@ void Scheme::start_repl()
     next = "";
     if (res) {
       std::cout << res->as_string() << '\n';
+    } else {
+      fmt::print("ERROR:\n{}\n", res.error());
     }
   }
 }
