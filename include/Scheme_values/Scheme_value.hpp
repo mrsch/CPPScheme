@@ -52,7 +52,8 @@ public:
   }
 
   std::string as_string() const;
-  Maybe<Scheme_value> eval(const Env_ptr& env) const;
+  Eval_result eval(const Env_ptr& env) const;
+  Eval_result eval(const Env_ptr& env, List args) const;
 
 private:
   Value value = Nil();

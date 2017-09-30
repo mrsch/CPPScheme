@@ -14,15 +14,19 @@ struct Print_visitor {
 
 struct Eval_visitor {
   explicit Eval_visitor(const std::shared_ptr<Environment>& env) : env(env){};
+  explicit Eval_visitor(const std::shared_ptr<Environment>& env,
+                        const List& args)
+    : env(env), args(args){};
 
   template <typename T>
-  Maybe<Scheme_value> operator()(T value) const
+  Eval_result operator()(T value) const
   {
     return value.eval(env);
   }
 
 private:
   const std::shared_ptr<Environment>& env;
+  List args;
 };
 
 Scheme_value::Scheme_value(Value value) : value(value)
@@ -34,8 +38,13 @@ std::string Scheme_value::as_string() const
   return std::visit(Print_visitor{}, value);
 }
 
-Maybe<Scheme_value>
-Scheme_value::eval(const std::shared_ptr<Environment>& env) const
+Eval_result Scheme_value::eval(const std::shared_ptr<Environment>& env) const
 {
   return std::visit(Eval_visitor(env), value);
+}
+
+Eval_result Scheme_value::eval(const std::shared_ptr<Environment>& env,
+                               List args) const
+{
+  return std::visit(Eval_visitor(env, args), value);
 }

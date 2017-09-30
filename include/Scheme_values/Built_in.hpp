@@ -10,7 +10,7 @@ class Scheme_value;
 class Environment;
 
 using Procedure =
-  std::function<Scheme_value(const std::vector<Scheme_value>&, const Env_ptr&)>;
+  std::function<Eval_result(const std::vector<Scheme_value>&, const Env_ptr&)>;
 
 class Built_in
 {
@@ -18,8 +18,8 @@ public:
   explicit Built_in(Procedure proc);
 
   std::string as_string();
-  Maybe<Scheme_value> eval(const Env_ptr& env);
-  Scheme_value execute(const Env_ptr& env, List args);
+  Eval_result eval(const Env_ptr& env);
+  Eval_result execute(const Env_ptr& env, List args);
 
 private:
   Procedure proc;

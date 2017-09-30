@@ -10,7 +10,7 @@ Lambda::Lambda(List arg_list,
 {
 }
 
-Maybe<Scheme_value> Lambda::eval(const std::shared_ptr<Environment>& /* env */)
+Eval_result Lambda::eval(const std::shared_ptr<Environment>& /* env */)
 {
   return Scheme_value{String("Defined lambda")};
 }
@@ -28,8 +28,8 @@ std::string Lambda::as_string()
   return result;
 }
 
-Scheme_value Lambda::execute(const std::shared_ptr<Environment>& env,
-                             List args) const
+Eval_result Lambda::execute(const std::shared_ptr<Environment>& env,
+                            List args) const
 {
   // TODO: Switch for dynamic/lexical scoping
   auto temp_env = std::make_shared<Environment>(closure);
@@ -37,13 +37,22 @@ Scheme_value Lambda::execute(const std::shared_ptr<Environment>& env,
   auto& list = arg_list.get_list();
   for (size_t i = 0; i < list.size(); ++i) {
     auto evaled_arg = args.get_list()[i].eval(env);
-    temp_env->add_to_env(list[i].as_string(), evaled_arg.value());
+    if (evaled_arg) {
+      temp_env->add_to_env(list[i].as_string(), *evaled_arg);
+    } else {
+      // TODO: error message
+      return evaled_arg;
+    }
   }
 
-  Maybe<Scheme_value> result;
+  Eval_result result;
   for (auto& body : body_expressions) {
     result = body.eval(temp_env);
+    if (!result) {
+      // TODO: Error message
+      return result;
+    }
   }
 
-  return result.value();
+  return result;
 }

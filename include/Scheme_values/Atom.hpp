@@ -14,7 +14,7 @@ class Atom
 public:
   explicit Atom(const std::string& atom);
 
-  Maybe<Scheme_value> eval(const Env_ptr& env);
+  Eval_result eval(const Env_ptr& env);
   std::string as_string() const;
 
 private:

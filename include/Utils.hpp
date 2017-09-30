@@ -10,7 +10,6 @@
 #include <unordered_map>
 
 class Scheme_value;
-
 using Eval_result = Either<Scheme_value, std::string>;
 
 template <typename T>

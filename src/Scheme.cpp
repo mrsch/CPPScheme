@@ -56,8 +56,8 @@ void Scheme::start_repl()
 
     auto res = parse(next).eval(default_env);
     next = "";
-    if (res.has_value()) {
-      std::cout << res.value().as_string() << '\n';
+    if (res) {
+      std::cout << res->as_string() << '\n';
     }
   }
 }

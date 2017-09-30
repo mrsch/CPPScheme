@@ -19,7 +19,7 @@ std::string Vector::as_string()
   return res;
 }
 
-Maybe<Scheme_value> Vector::eval(const std::shared_ptr<Environment>& env)
+Eval_result Vector::eval(const std::shared_ptr<Environment>& env)
 {
   return Scheme_value{*this};
 }

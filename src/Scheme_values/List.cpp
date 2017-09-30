@@ -26,31 +26,32 @@ std::string List::as_string()
   return res;
 }
 
-Maybe<Scheme_value> List::eval(const std::shared_ptr<Environment>& env)
+Eval_result List::eval(const std::shared_ptr<Environment>& env)
 {
   if (list.size() == 0) { // Empty list return ()
     return Scheme_value{*this};
   }
 
-  if (auto maybe_atom = list[0].get_value<Atom>();
-      maybe_atom.has_value()) { // Special Form
-    auto maybe = eval_special_forms(maybe_atom.value(), env);
-    if (maybe.has_value()) {
-      return maybe.value();
+  if (auto maybe_atom = list[0].get_value<Atom>()) { // Special Form
+    auto maybe = eval_special_forms(*maybe_atom, env);
+    if (maybe) {
+      return *maybe;
     }
   }
 
   // No Special syntax. Check for bindings
   auto first = list[0].eval(env);
 
-  if (auto maybe_builtin = first.value().get_value<Built_in>();
-      maybe_builtin.has_value()) {
-    auto builtin = maybe_builtin.value();
+  if (!first) {
+    // TODO: Handle error
+  }
+
+  if (auto maybe_builtin = first->get_value<Built_in>()) {
+    auto builtin = *maybe_builtin;
     list.erase(list.begin());
     return builtin.execute(env, *this);
-  } else if (auto maybe_lambda = first.value().get_value<Lambda>();
-             maybe_lambda.has_value()) {
-    auto lambda = maybe_lambda.value();
+  } else if (auto maybe_lambda = first->get_value<Lambda>()) {
+    auto lambda = *maybe_lambda;
     list.erase(list.begin());
     return lambda.execute(env, *this);
   }
@@ -63,15 +64,20 @@ const std::vector<Scheme_value>& List::get_list() const
   return list;
 }
 
-Maybe<Scheme_value> List::eval_special_forms(Atom atom, const Env_ptr& env)
+Eval_result List::eval_special_forms(Atom atom, const Env_ptr& env)
 {
   // Primitive Expressions
   if (atom.as_string() == "define") {
-    if (auto atom = list[1].get_value<Atom>(); atom.has_value()) {
-      env->add_to_env(atom.value().as_string(), list[2].eval(env).value());
-      return Scheme_value{atom.value()};
+    if (auto atom = list[1].get_value<Atom>()) {
+      auto result = list[2].eval(env);
+      if (!result) {
+        // TODO: Handle error
+      }
+
+      env->add_to_env(atom->as_string(), *result);
+      return Scheme_value{*atom};
     } else { // Lambda definition
-      auto func_definition = list[1].get_value<List>().value();
+      auto func_definition = *(list[1].get_value<List>());
       auto func_name = func_definition.get_list()[0].as_string();
 
       std::vector<Scheme_value> params;
@@ -101,9 +107,13 @@ Maybe<Scheme_value> List::eval_special_forms(Atom atom, const Env_ptr& env)
       Lambda(list[1].get_value<List>().value(), body_expressions, env)};
   } else if (atom.as_string() == "if") {
     auto cond = list[1].eval(env);
-    auto value = true;
-    if (auto b = cond.value().get_value<Bool>(); b.has_value()) {
-      value = b.value().get_bool();
+    if (!cond) {
+      // TODO: Handle error
+    }
+
+    auto value = true; // Everythin except #f eval to true
+    if (auto b = cond->get_value<Bool>()) {
+      value = b->get_bool();
     }
 
     if (value) {
@@ -120,16 +130,18 @@ Maybe<Scheme_value> List::eval_special_forms(Atom atom, const Env_ptr& env)
       auto cond = clause_list[0];
 
       bool eval_expressions = false;
-      if (auto atom = cond.get_value<Atom>(); atom.has_value()) {
-        if (atom.value().as_string() == "else") {
+      if (auto atom = cond.get_value<Atom>()) {
+        if (atom->as_string() == "else") {
           eval_expressions = true;
         }
-      } else if (cond.eval(env).value().get_value<Bool>().value().get_bool()) {
-        eval_expressions = true;
+      } else if (auto result = cond.eval(env)) {
+        if (result->get_value<Bool>()->get_bool()) {
+          eval_expressions = true;
+        }
       }
 
       if (eval_expressions) {
-        Maybe<Scheme_value> res;
+        Eval_result res;
         for (int i = 1; i < clause_list.size(); ++i) {
           res = clause_list[i].eval(env);
         }
@@ -138,9 +150,14 @@ Maybe<Scheme_value> List::eval_special_forms(Atom atom, const Env_ptr& env)
       }
     }
   } else if (atom.as_string() == "set!") {
-    if (env->get(list[1].as_string()).has_value()) {
-      env->add_to_env(list[1].get_value<Atom>().value().as_string(),
-                      list[2].eval(env).value());
+    auto atom_name = list[1].as_string();
+    if (env->get(list[1].as_string())) {
+      auto res = list[2].eval(env);
+      if (res) {
+        env->add_to_env(atom_name, *res);
+      } else {
+        // TODO: handle_error
+      }
 
       return Scheme_value{list[1]};
     } else {
@@ -166,5 +183,5 @@ Maybe<Scheme_value> List::eval_special_forms(Atom atom, const Env_ptr& env)
     return Scheme_value();
   }
 
-  return {};
+  return {std::string("No special form")};
 }

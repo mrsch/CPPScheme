@@ -14,7 +14,7 @@ public:
   explicit Bool(bool b);
 
   std::string as_string();
-  Maybe<Scheme_value> eval(const Env_ptr& env);
+  Eval_result eval(const Env_ptr& env);
 
   bool get_bool() const;
 

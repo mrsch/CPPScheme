@@ -11,8 +11,8 @@ class Environment
 public:
   explicit Environment(const Env_ptr& parent = nullptr);
 
-  Maybe<Scheme_value> get(const std::string& key);
-  Maybe<Scheme_value> get_from_this(const std::string& key);
+  std::optional<Scheme_value> get(const std::string& key);
+  std::optional<Scheme_value> get_from_this(const std::string& key);
 
   void add_to_env(const std::string& key, Scheme_value value);
 

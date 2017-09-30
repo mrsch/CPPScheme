@@ -7,8 +7,39 @@
 template <typename Left, typename Right>
 class Either
 {
-  explicit Either(const std::variant<Left, Right>& val) : val(val)
+public:
+  Either() = default;
+
+  Either(const Left& val) : val(val)
   {
+  }
+
+  Either(const Right& val) : val(val)
+  {
+  }
+
+  Either(const std::variant<std::monostate, Left, Right>& val) : val(val)
+  {
+  }
+
+  operator bool() const
+  {
+    return std::holds_alternative<Left>(val);
+  }
+
+  Left& operator*()
+  {
+    return std::get<Left>(val);
+  }
+
+  Left* operator->()
+  {
+    return &std::get<Left>(val);
+  }
+
+  Right& error()
+  {
+    return std::get<Right>(val);
   }
 
   Either& left_map(const std::function<Left(Left)>& func)
@@ -27,6 +58,11 @@ class Either
     }
 
     return *this;
+  }
+
+  std::variant<Left, Right> get() const
+  {
+    return val;
   }
 
 private:

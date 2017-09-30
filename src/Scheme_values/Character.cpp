@@ -12,7 +12,7 @@ std::string Character::as_string() const
   return std::string(1, value);
 }
 
-Maybe<Scheme_value> Character::eval(const Env_ptr& /* env */)
+Eval_result Character::eval(const Env_ptr& /* env */)
 {
-  return Scheme_value{*this};
+  return Eval_result(Scheme_value{*this});
 }
