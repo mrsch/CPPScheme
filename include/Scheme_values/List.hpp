@@ -26,6 +26,8 @@ private:
   std::vector<Scheme_value> list;
 
   Eval_result eval_special_forms(const Atom& atom, const Env_ptr& env);
+  Eval_result eval_expressions(const std::vector<Scheme_value>& expr_list,
+                               const Env_ptr& env);
 };
 
 #endif // SCHEME_VALUES_LIST_HPP

@@ -48,7 +48,7 @@
     - [X] set!
 *** Derived Expressions
     - [X] cond
-    - [ ] case
+    - [X] case
     - [ ] and
     - [ ] or
     - [ ] let, let*, letrec

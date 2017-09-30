@@ -151,26 +151,42 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       auto clause_list = clause.get_list();
       auto cond = clause_list[0];
 
-      bool eval_expressions = false;
       if (auto atom = cond.get_value<Atom>()) {
         if (atom->as_string() == "else") {
-          eval_expressions = true;
+          return eval_expressions(clause_list, env);
         }
       } else if (auto result = cond.eval(env)) {
         if (result->get_value<Bool>()->get_bool()) {
-          eval_expressions = true;
+          return eval_expressions(clause_list, env);
         }
-      }
-
-      if (eval_expressions) {
-        Eval_result res;
-        for (size_t i = 1; i < clause_list.size(); ++i) {
-          res = clause_list[i].eval(env);
-        }
-
-        return res;
       }
     }
+  } else if (atom.as_string() == "case") {
+    list.erase(list.begin());
+    if (auto key = list[0].eval(env)) {
+      list.erase(list.begin());
+      for (auto& maybe_clause : list) {
+        auto clause = maybe_clause.get_value<List>().value();
+        auto clause_list = clause.get_list();
+
+        if (auto atom = clause_list[0].get_value<Atom>()) {
+          if (atom->as_string() == "else") {
+            return eval_expressions(clause_list, env);
+          }
+        }
+
+        if (auto objects = clause_list[0].get_value<List>()) {
+          for (auto& object : objects->get_list()) {
+            if (key->as_string() == object.as_string()) { // FIXME: Use eqv?
+              return eval_expressions(clause_list, env);
+            }
+          }
+        };
+      }
+    } else {
+      return fmt::format("Invalid first argument to case: {} ", key.error());
+    }
+
   } else if (atom.as_string() == "set!") {
     auto atom_name = list[1].as_string();
     if (env->get(list[1].as_string())) {
@@ -210,4 +226,14 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
   }
 
   return {std::string("")};
+}
+
+Eval_result List::eval_expressions(const std::vector<Scheme_value>& expr_list,
+                                   const Env_ptr& env)
+{
+  Eval_result res;
+  for (size_t i = 1; i < expr_list.size(); ++i) {
+    res = expr_list[i].eval(env);
+  }
+  return res;
 }
