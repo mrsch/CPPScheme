@@ -52,7 +52,7 @@
     - [X] and
     - [X] or
     - [X] let
-    - [ ] begin
+    - [X] begin
     - [ ] do
     - [ ] named let
     - [ ] delay + force

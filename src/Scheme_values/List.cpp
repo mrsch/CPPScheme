@@ -260,6 +260,9 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       return fmt::format("First parameter for let must be a List");
     }
 
+  } else if (atom.as_string() == "begin") {
+    list.pop_front();
+    return eval_expressions(list, env);
   } else if (atom.as_string() == "load") {
     // load has to be here because it
     // has to be executed in the root
