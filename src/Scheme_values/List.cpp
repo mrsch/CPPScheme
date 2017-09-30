@@ -214,6 +214,22 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       }
       return res;
     }
+  } else if (atom.as_string() == "or") {
+    if (list.size() == 1) {
+      return Scheme_value(Bool(false));
+    } else {
+      list.erase(list.begin());
+      Eval_result res;
+      for (auto& test : list) {
+        if ((res = test.eval(env))) {
+          Bool b(*res);
+          if (b.get_bool()) {
+            return Scheme_value(b);
+          }
+        }
+      }
+      return res;
+    }
   } else if (atom.as_string() == "load") {
     // load has to be here because it
     // has to be executed in the root
