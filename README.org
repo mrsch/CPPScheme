@@ -1,97 +1,102 @@
 * Scheme
+  Scheme implementation in C++ that depends heavily on C++17s new
+  =std::variant= and =std::optional=.
+
   Tested with gcc 7.2.0 on Linux
 
-* Setup
-  1. Run =cmake -E chdir build cmake ..= to setup the project
-  2. Compile with =cmake --build build=
-  3. Run main: =cd bin && ./main=
-  4. Run tests: =cd bin && ./unit_test=
-* Anti Features
-  - No proper tail recursion
-  - No tests 
-  - Not all standard procedures implemented
-  - No case
-* Features
-  - [ ] Backquote
-** Primitive Expression
-   - [X] define
-     - [X] shorthand lambda define
-   - [X] quote
-   - [X] lambda
-   - [X] procedure call
-   - [X] if
-   - [X] set!
-** TODO Derived Expression
-   - [ ] cond
-   - [ ] case
-   - [ ] and
-   - [ ] or
-   - [ ] let, let*, letrec
-   - [ ] begin
-   - [ ] do
-   - [ ] named let
-   - [ ] delay + force
-   - [ ] quasiquote
-** Macros
-** Standard Procedures
-   - [X] apply
-   - [X] eval
-   - [X] car
-   - [X] cdr
-   - [X] cons
-   - [ ] eqv?
-   - [ ] eq?
-   - [ ] equal=
-*** Booleans
-   - [X] not
-*** Math
-   - [X] +
-   - [X] - 
-   - [X] *
-   - [X] / 
-   - [X] modulo
-   - [ ] remainder 
-   - [ ] max min abs
-   - [ ] numerator 
-   - [ ] denominator 
-   - [ ] gcd
-   - [ ] lcm 
-   - [ ] floor 
-   - [ ] ceiling
-   - [ ] truncate
-   - [ ] round 
-   - [ ] rationalize
-   - [ ] expt
-*** Numerical
-    - [X] =
-    - [X] <
-    - [X] >
-    - [X] <=
-    - [X] >=
-    - [ ] number?
-    - [ ] complex?
-    - [ ] real?
-    - [ ] rational?
-    - [ ] integer?
-    - [X] zero?
-    - [X] positive?
-    - [X] negative?
-    - [X] odd?
-    - [X] even?
+** Setup
+   1. Run =cmake -E chdir build cmake ..= to setup the project
+   2. Compile with =cmake --build build=
+   3. Run main: =cd bin && ./main=
+   4. Run (non existanst :-()tests: =cd bin && ./unit_test=
+** Anti Features
+   - No proper tail recursion
+   - No tests 
+   - Not all standard procedures implemented
+   - No case
+   - Only =floats= as numbers
+   - No macros
+** Features
+*** Types
+    - Booleans - =#t= and =#f=
+    - Numbers - =floats=
+    - Strings
+    - Vector - =#()=
+    - Lambdas
+    - Characters - =#\t=
+    - Atoms
+*** Primitive Expressions
+    - [X] define
+      - [X] shorthand lambda define
+    - [X] quote
+    - [X] lambda
+    - [X] procedure call
+    - [X] if
+    - [X] set!
+*** Derived Expressions
+    - [X] cond
+    - [ ] case
+    - [ ] and
+    - [ ] or
+    - [ ] let, let*, letrec
+    - [ ] begin
+    - [ ] do
+    - [ ] named let
+    - [ ] delay + force
+    - [ ] quasiquote
+*** Standard Procedures
+    - [X] apply
+    - [X] eval
+    - [X] car
+    - [X] cdr
+    - [X] cons
+    - [X] eqv?
+    - [ ] eq?
+    - [ ] equal=
+**** Booleans
+    - [X] not
+**** Math
+    - [X] +
+    - [X] - 
+    - [X] *
+    - [X] / 
+    - [X] modulo
+    - [ ] remainder 
+    - [ ] max 
     - [ ] min
-    - [ ] max
-*** Lists
-    - [X] null?
-    - [X] length
-    - [X] reverse
-    - [X] map (only 1 list)
-** Additional Procedures
-   - [X] curry
-   - [X] id
-   - [X] flip
-   - [X] compose
-   - [X] folds (foldl foldr)
-   - [X] unfold
-   - [X] sum
-   - [X] product
-   - [X] filter
+    - [ ] abs
+    - [ ] gcd
+    - [ ] lcm 
+    - [ ] floor 
+    - [ ] ceiling
+    - [ ] truncate
+    - [ ] round 
+    - [ ] expt
+**** Numerical
+     - [X] =
+     - [X] <
+     - [X] >
+     - [X] <=
+     - [X] >=
+     - [X] zero?
+     - [X] positive?
+     - [X] negative?
+     - [X] odd?
+     - [X] even?
+     - [ ] min
+     - [ ] max
+**** Lists
+     - [X] null?
+     - [X] length
+     - [X] reverse
+     - [X] map (only 1 list)
+*** Additional Procedures
+    - [X] curry
+    - [X] id
+    - [X] flip
+    - [X] compose
+    - [X] folds (foldl foldr)
+    - [X] unfold
+    - [X] sum
+    - [X] product
+    - [X] filter
