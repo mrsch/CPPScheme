@@ -67,6 +67,7 @@ void Scheme::start_repl()
 
 void Scheme::build_default_environment()
 {
+  default_env->add_to_env("display", Scheme_value(Built_in(display)));
   default_env->add_to_env("apply", Scheme_value(Built_in(apply)));
   default_env->add_to_env("eval", Scheme_value(Built_in(eval)));
   default_env->add_to_env("eqv?", Scheme_value(Built_in(eqv)));

@@ -66,6 +66,8 @@
     - [X] eqv?
     - [ ] eq?
     - [ ] equal=
+**** Output
+    - [X] display
 **** Booleans
     - [X] not
 **** Math

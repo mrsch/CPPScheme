@@ -3,6 +3,7 @@
 
 #include "Scheme_values/Scheme_value.hpp"
 
+#include <fmt/format.h>
 #include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,6 +13,21 @@
 inline Eval_result eqv(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   return Scheme_value(Bool(args[0].as_string() == args[1].as_string()));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Output
+////////////////////////////////////////////////////////////////////////////////
+
+inline Eval_result display(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  if (auto string = args[0].get_value<String>()) {
+    fmt::print("{}\n", string->get_string());
+  } else {
+    fmt::print("{}\n", args[0].as_string());
+  }
+
+  return Scheme_value(); // Return value is unspecified
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +41,7 @@ inline Eval_result list(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result cons(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (auto list = args[1].get_value<List>(); list.has_value()) {
+  if (auto list = args[1].get_value<List>()) {
     std::deque<Scheme_value> l;
     l.push_back(args[0]);
     for (auto& v : list.value().get_list()) {
