@@ -9,7 +9,7 @@ Character::Character(char c) : value(c)
 
 std::string Character::as_string() const
 {
-  return std::string(1, value);
+  return "'" + std::string(1, value) + "'";
 }
 
 Eval_result Character::eval(const Env_ptr& /* env */)

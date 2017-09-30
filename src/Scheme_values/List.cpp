@@ -90,19 +90,18 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     if (auto atom = list[1].get_value<Atom>()) {
       auto result = list[2].eval(env);
       if (!result) {
-        // TODO: Handle error
         return result;
+      } else {
+        env->add_to_env(atom->as_string(), *result);
+        return Scheme_value{*atom};
       }
-
-      env->add_to_env(atom->as_string(), *result);
-      return Scheme_value{*atom};
-    } else { // Lambda definition
-      auto func_definition = *(list[1].get_value<List>());
-      auto func_name = func_definition.get_list()[0].as_string();
-
+    } else if (auto func_definition =
+                 list[1].get_value<List>()) { // Lambda definition
+      auto definition_list = func_definition->get_list();
+      auto func_name = definition_list[0];
       std::vector<Scheme_value> params;
-      for (size_t i = 1; i < func_definition.get_list().size(); ++i) {
-        params.push_back(func_definition.get_list()[i]);
+      for (size_t i = 1; i < definition_list.size(); ++i) {
+        params.push_back(definition_list[i]);
       }
 
       std::vector<Scheme_value> body_expressions;
@@ -111,9 +110,13 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       }
 
       env->add_to_env(
-        func_name, Scheme_value{Lambda(List(params), body_expressions, env)});
+        func_name.as_string(),
+        Scheme_value{Lambda(List(params), body_expressions, env)});
 
-      return func_definition.get_list()[0];
+      return func_name;
+
+    } else {
+      return fmt::format("Invalid define syntax: {}", as_string());
     }
   } else if (atom.as_string() == "quote") {
     return Scheme_value{list[1]};
@@ -141,7 +144,6 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     } else {
       return list[3].eval(env);
     }
-
   } else if (atom.as_string() == "cond") {
     list.erase(list.begin());
     for (auto& maybe_clause : list) {
@@ -162,7 +164,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
 
       if (eval_expressions) {
         Eval_result res;
-        for (int i = 1; i < clause_list.size(); ++i) {
+        for (size_t i = 1; i < clause_list.size(); ++i) {
           res = clause_list[i].eval(env);
         }
 
@@ -184,9 +186,10 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       fmt::print("Unbound varable: {}\n", list[1].as_string());
       return Scheme_value{};
     }
-  } else if (atom.as_string() == "load") { // load has to be here because it
-                                           // has to be executed in the root
-                                           // Environment
+  } else if (atom.as_string() == "load") {
+    // load has to be here because it
+    // has to be executed in the root
+    // Environment
     std::ifstream source;
 
     source.open(list[1].get_value<String>().value().get_string(), std::ios::in);

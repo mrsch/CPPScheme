@@ -19,6 +19,6 @@ Eval_result Atom::eval(const std::shared_ptr<Environment>& env)
   if (auto res = env->get(name)) {
     return *res;
   } else {
-    return fmt::format("Atom \"{}\" is not defined.\n", name);
+    return fmt::format("Unbound variable: {}\n", name);
   }
 }

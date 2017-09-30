@@ -29,6 +29,7 @@
    - Haskell like error handling with =Either= type
    - Scheme values as Sum type with =std::variant=
    - Should not leak thanks to =std::shared_ptr=
+   - Some standard procedures are implemented directly in Scheme (see =resources/stdlib.scm=)
 *** Types
     - Booleans - =#t= and =#f=
     - Numbers - =floats=
