@@ -1,8 +1,8 @@
-* Scheme
+* CPPScheme
   Scheme implementation in C++ that depends heavily on C++17s new
   =std::variant= and =std::optional=.
 
-  Uses Haskell-like Maybe and Either types.
+  Uses Haskell-like =Maybe= and =Either= types.
 
   Tested with gcc 7.2.0 on Linux
 
@@ -18,7 +18,11 @@
    - No case
    - Only =floats= as numbers
    - No macros
+   - Not optimized
 ** Features
+   - Haskell like error handling with =Either= type
+   - Scheme values as Sum type with =std::variant=
+   - Should not leak thanks to =std::shared_ptr=
 *** Types
     - Booleans - =#t= and =#f=
     - Numbers - =floats=
