@@ -1,6 +1,7 @@
 #ifndef SCHEME_VALUES_NUMBER_HPP
 #define SCHEME_VALUES_NUMBER_HPP
 
+#include "Utils.hpp"
 #include <memory>
 #include <string>
 
@@ -13,7 +14,7 @@ public:
   explicit Number(float number);
 
   std::string as_string() const;
-  Scheme_value eval(const std::shared_ptr<Environment>& env);
+  Scheme_value eval(const Env_ptr& env);
 
   float get_number() const
   {

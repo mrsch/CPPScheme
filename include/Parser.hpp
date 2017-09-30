@@ -8,20 +8,21 @@
 #include "Scheme_values/Number.hpp"
 #include "Scheme_values/String.hpp"
 #include "Scheme_values/Vector.hpp"
+#include "Utils.hpp"
 
 #include <optional>
 #include <string>
 
 Scheme_value parse(std::string& expr);
 
-std::optional<Atom> parse_atom(std::string& expr);
-std::optional<Bool> parse_bool(std::string& expr);
-std::optional<Character> parse_character(std::string& expr);
-std::optional<String> parse_string(std::string& expr);
-std::optional<List> parse_list(std::string& expr);
-std::optional<List> parse_specials(std::string& expr);
-std::optional<Number> parse_number(std::string& expr);
-std::optional<Vector> parse_vector(std::string& expr);
+Maybe<Atom> parse_atom(std::string& expr);
+Maybe<Bool> parse_bool(std::string& expr);
+Maybe<Character> parse_character(std::string& expr);
+Maybe<String> parse_string(std::string& expr);
+Maybe<List> parse_list(std::string& expr);
+Maybe<List> parse_specials(std::string& expr);
+Maybe<Number> parse_number(std::string& expr);
+Maybe<Vector> parse_vector(std::string& expr);
 void parse_comment(std::string& expr);
 
 #endif // PARSER_HPP

@@ -7,7 +7,7 @@ Built_in::Built_in(Procedure proc) : proc(proc)
 {
 }
 
-Scheme_value Built_in::eval(const std::shared_ptr<Environment>& /* env */)
+Scheme_value Built_in::eval(const Env_ptr& /* env */)
 {
   return Scheme_value{String("Built-in procedure")};
 }

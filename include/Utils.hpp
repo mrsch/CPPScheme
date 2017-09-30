@@ -2,12 +2,19 @@
 #define UTILS_HPP
 
 #include <algorithm>
+#include <memory>
 #include <optional>
 #include <string>
 #include <unordered_map>
 
+template <typename T>
+using Maybe = std::optional<T>;
+
+class Environment;
+using Env_ptr = std::shared_ptr<Environment>;
+
 template <class K, class V>
-std::optional<V> get_from_map(K key, const std::unordered_map<K, V>& map)
+Maybe<V> get_from_map(K key, const std::unordered_map<K, V>& map)
 {
   if (map.count(key)) {
     return map.at(key);

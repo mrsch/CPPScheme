@@ -1,6 +1,8 @@
 #ifndef SCHEME_VALUES_ATOM_HPP
 #define SCHEME_VALUES_ATOM_HPP
 
+#include "Utils.hpp"
+
 #include <memory>
 #include <string>
 
@@ -12,7 +14,7 @@ class Atom
 public:
   explicit Atom(const std::string& atom);
 
-  Scheme_value eval(const std::shared_ptr<Environment>& env);
+  Scheme_value eval(const Env_ptr& env);
   std::string as_string() const;
 
 private:

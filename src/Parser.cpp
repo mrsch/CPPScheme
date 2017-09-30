@@ -43,7 +43,7 @@ Scheme_value parse(std::string& expr)
   return Scheme_value();
 }
 
-std::optional<List> parse_specials(std::string& expr)
+Maybe<List> parse_specials(std::string& expr)
 {
   if (expr[0] == '\'') {
     expr.erase(0, 1);
@@ -57,7 +57,7 @@ std::optional<List> parse_specials(std::string& expr)
   return {};
 }
 
-std::optional<List> parse_list(std::string& expr)
+Maybe<List> parse_list(std::string& expr)
 {
   if (expr[0] == '(') {
     expr.erase(0, 1);
@@ -74,7 +74,7 @@ std::optional<List> parse_list(std::string& expr)
   return {};
 }
 
-std::optional<Vector> parse_vector(std::string& expr)
+Maybe<Vector> parse_vector(std::string& expr)
 {
   if (expr[0] == '#' && expr[1] == '(') {
     expr.erase(0, 2);
@@ -91,7 +91,7 @@ std::optional<Vector> parse_vector(std::string& expr)
   return {};
 }
 
-std::optional<Atom> parse_atom(std::string& expr)
+Maybe<Atom> parse_atom(std::string& expr)
 {
   if (std::isalpha(expr[0]) || is_symbol(expr[0])) {
     return Atom(substr_and_remove(expr, expr.find_first_of(" )\n")));
@@ -100,7 +100,7 @@ std::optional<Atom> parse_atom(std::string& expr)
   }
 }
 
-std::optional<Character> parse_character(std::string& expr)
+Maybe<Character> parse_character(std::string& expr)
 {
   if (expr.find("#\\space") == 0) {
     expr.erase(0, 7);
@@ -118,7 +118,7 @@ std::optional<Character> parse_character(std::string& expr)
   }
 }
 
-std::optional<Bool> parse_bool(std::string& expr)
+Maybe<Bool> parse_bool(std::string& expr)
 {
   if (expr.find("#f") == 0) {
     expr.erase(0, 2);
@@ -133,7 +133,7 @@ std::optional<Bool> parse_bool(std::string& expr)
   }
 }
 
-std::optional<String> parse_string(std::string& expr)
+Maybe<String> parse_string(std::string& expr)
 {
   if (expr.find("\"") == 0) {
     expr.erase(0, 1);
@@ -146,7 +146,7 @@ std::optional<String> parse_string(std::string& expr)
 }
 
 // FIXME: More number types (hex oct float ...)
-std::optional<Number> parse_number(std::string& expr)
+Maybe<Number> parse_number(std::string& expr)
 {
   if (std::isdigit(expr[0])
       || ((expr[0] == '+' || expr[0] == '-') && std::isdigit(expr[1]))) {

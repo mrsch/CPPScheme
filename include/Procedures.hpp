@@ -9,8 +9,7 @@
 // Equivalence predicated
 ////////////////////////////////////////////////////////////////////////////////
 
-inline Scheme_value eqv(const std::vector<Scheme_value>& args,
-                        const std::shared_ptr<Environment>&)
+inline Scheme_value eqv(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   return Scheme_value(Bool(args[0].as_string() == args[1].as_string()));
 }
@@ -19,14 +18,12 @@ inline Scheme_value eqv(const std::vector<Scheme_value>& args,
 // List
 ////////////////////////////////////////////////////////////////////////////////
 
-inline Scheme_value list(const std::vector<Scheme_value>& args,
-                         const std::shared_ptr<Environment>&)
+inline Scheme_value list(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   return Scheme_value(List(args));
 }
 
-inline Scheme_value cons(const std::vector<Scheme_value>& args,
-                         const std::shared_ptr<Environment>&)
+inline Scheme_value cons(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   if (auto list = args[1].get_value<List>(); list.has_value()) {
     std::vector<Scheme_value> l;
@@ -41,7 +38,7 @@ inline Scheme_value cons(const std::vector<Scheme_value>& args,
 }
 
 inline Scheme_value append(const std::vector<Scheme_value>& args,
-                           const std::shared_ptr<Environment>&)
+                           const Env_ptr&)
 {
   auto first_list = args[0].get_value<List>().value().get_list();
 
@@ -53,14 +50,12 @@ inline Scheme_value append(const std::vector<Scheme_value>& args,
   return Scheme_value(List(first_list));
 }
 
-inline Scheme_value car(const std::vector<Scheme_value>& args,
-                        const std::shared_ptr<Environment>&)
+inline Scheme_value car(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   return args[0].get_value<List>().value().get_list()[0];
 }
 
-Scheme_value cdr(const std::vector<Scheme_value>& args,
-                 const std::shared_ptr<Environment>&)
+Scheme_value cdr(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   auto list = args[0].get_value<List>().value().get_list();
   auto result = std::vector<Scheme_value>(list.begin() + 1, list.end());
@@ -68,7 +63,7 @@ Scheme_value cdr(const std::vector<Scheme_value>& args,
 }
 
 inline Scheme_value eval(const std::vector<Scheme_value>& args,
-                         const std::shared_ptr<Environment>& env)
+                         const Env_ptr& env)
 {
   return args[0].eval(env);
 }
@@ -77,8 +72,7 @@ inline Scheme_value eval(const std::vector<Scheme_value>& args,
 // Control features
 ////////////////////////////////////////////////////////////////////////////////
 
-Scheme_value apply(const std::vector<Scheme_value>& args,
-                   const std::shared_ptr<Environment>& env)
+Scheme_value apply(const std::vector<Scheme_value>& args, const Env_ptr& env)
 {
   List arg_list(std::vector<Scheme_value>(args.begin() + 1, args.end() - 1));
   std::vector<Scheme_value> app;
@@ -96,8 +90,7 @@ Scheme_value apply(const std::vector<Scheme_value>& args,
 ////////////////////////////////////////////////////////////////////////////////
 // Math
 ////////////////////////////////////////////////////////////////////////////////
-inline Scheme_value add(const std::vector<Scheme_value>& args,
-                        const std::shared_ptr<Environment>&)
+inline Scheme_value add(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   float sum = 0;
   for (auto& arg : args) {
@@ -107,8 +100,7 @@ inline Scheme_value add(const std::vector<Scheme_value>& args,
   return Scheme_value(Number(sum));
 }
 
-inline Scheme_value sub(const std::vector<Scheme_value>& args,
-                        const std::shared_ptr<Environment>&)
+inline Scheme_value sub(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   auto res = args[0].get_value<Number>().value().get_number();
 
@@ -124,8 +116,7 @@ inline Scheme_value sub(const std::vector<Scheme_value>& args,
   return Scheme_value(Number(res));
 }
 
-inline Scheme_value mul(const std::vector<Scheme_value>& args,
-                        const std::shared_ptr<Environment>&)
+inline Scheme_value mul(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   float res = 1;
 
@@ -137,7 +128,7 @@ inline Scheme_value mul(const std::vector<Scheme_value>& args,
 }
 
 inline Scheme_value divide(const std::vector<Scheme_value>& args,
-                           const std::shared_ptr<Environment>&)
+                           const Env_ptr&)
 {
   auto res = args[0].get_value<Number>().value().get_number();
 
@@ -151,7 +142,7 @@ inline Scheme_value divide(const std::vector<Scheme_value>& args,
 }
 
 inline Scheme_value modulo(const std::vector<Scheme_value>& args,
-                           const std::shared_ptr<Environment>&)
+                           const Env_ptr&)
 {
   int x = args[0].get_value<Number>().value().get_number();
   int y = args[1].get_value<Number>().value().get_number();
@@ -163,8 +154,7 @@ inline Scheme_value modulo(const std::vector<Scheme_value>& args,
 // Numerical
 ////////////////////////////////////////////////////////////////////////////////
 
-Scheme_value gt(const std::vector<Scheme_value>& args,
-                const std::shared_ptr<Environment>&)
+Scheme_value gt(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get_value<Number>().value().get_number()
       > args[1].get_value<Number>().value().get_number()) {
@@ -174,8 +164,7 @@ Scheme_value gt(const std::vector<Scheme_value>& args,
   }
 }
 
-Scheme_value gte(const std::vector<Scheme_value>& args,
-                 const std::shared_ptr<Environment>&)
+Scheme_value gte(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get_value<Number>().value().get_number()
       >= args[1].get_value<Number>().value().get_number()) {
@@ -185,8 +174,7 @@ Scheme_value gte(const std::vector<Scheme_value>& args,
   }
 }
 
-Scheme_value lt(const std::vector<Scheme_value>& args,
-                const std::shared_ptr<Environment>&)
+Scheme_value lt(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get_value<Number>().value().get_number()
       < args[1].get_value<Number>().value().get_number()) {
@@ -196,8 +184,7 @@ Scheme_value lt(const std::vector<Scheme_value>& args,
   }
 }
 
-Scheme_value lte(const std::vector<Scheme_value>& args,
-                 const std::shared_ptr<Environment>&)
+Scheme_value lte(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get_value<Number>().value().get_number()
       <= args[1].get_value<Number>().value().get_number()) {
@@ -207,8 +194,7 @@ Scheme_value lte(const std::vector<Scheme_value>& args,
   }
 }
 
-Scheme_value num_equal(const std::vector<Scheme_value>& args,
-                       const std::shared_ptr<Environment>&)
+Scheme_value num_equal(const std::vector<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get_value<Number>().value().get_number()
       == args[1].get_value<Number>().value().get_number()) {

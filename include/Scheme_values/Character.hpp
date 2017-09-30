@@ -1,6 +1,7 @@
 #ifndef SCHEME_VALUES_CHARACTER_HPP
 #define SCHEME_VALUES_CHARACTER_HPP
 
+#include "Utils.hpp"
 #include <memory>
 #include <string>
 
@@ -13,7 +14,7 @@ public:
   explicit Character(char c);
 
   std::string as_string() const;
-  Scheme_value eval(const std::shared_ptr<Environment>& env);
+  Scheme_value eval(const Env_ptr& env);
 
 private:
   char value;

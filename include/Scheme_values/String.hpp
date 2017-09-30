@@ -1,6 +1,8 @@
 #ifndef SCHEME_VALUES_STRING_HPP
 #define SCHEME_VALUES_STRING_HPP
 
+#include "Utils.hpp"
+
 #include <memory>
 #include <string>
 
@@ -13,7 +15,7 @@ public:
   explicit String(const std::string& str);
 
   std::string as_string() const;
-  Scheme_value eval(const std::shared_ptr<Environment>& env);
+  Scheme_value eval(const Env_ptr& env);
 
   std::string get_string() const;
 

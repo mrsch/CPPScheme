@@ -9,7 +9,7 @@ Nil::Nil()
 {
 }
 
-Scheme_value Nil::eval(const std::shared_ptr<Environment>& /* env */)
+Scheme_value Nil::eval(const Env_ptr& /* env */)
 {
   return Scheme_value{*this};
 }

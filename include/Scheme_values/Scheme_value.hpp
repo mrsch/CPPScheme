@@ -11,13 +11,13 @@
 #include "Scheme_values/Number.hpp"
 #include "Scheme_values/String.hpp"
 #include "Scheme_values/Vector.hpp"
+#include "Utils.hpp"
 
 #include <optional>
 #include <string>
 #include <variant>
 
 class Environment;
-
 class Scheme_value
 {
   // TODO: Dotted list/Pair
@@ -42,7 +42,7 @@ public:
   explicit Scheme_value(Value value);
 
   template <typename T>
-  std::optional<T> get_value() const
+  Maybe<T> get_value() const
   {
     if (std::holds_alternative<T>(value)) {
       return std::get<T>(value);
@@ -52,7 +52,7 @@ public:
   }
 
   std::string as_string() const;
-  Scheme_value eval(const std::shared_ptr<Environment>& env) const;
+  Scheme_value eval(const Env_ptr& env) const;
 
 private:
   Value value = Nil();

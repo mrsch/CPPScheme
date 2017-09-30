@@ -9,15 +9,15 @@
 class Environment
 {
 public:
-  explicit Environment(const std::shared_ptr<Environment>& parent = nullptr);
+  explicit Environment(const Env_ptr& parent = nullptr);
 
-  std::optional<Scheme_value> get(const std::string& key);
-  std::optional<Scheme_value> get_from_this(const std::string& key);
+  Maybe<Scheme_value> get(const std::string& key);
+  Maybe<Scheme_value> get_from_this(const std::string& key);
 
   void add_to_env(const std::string& key, Scheme_value value);
 
 private:
-  std::shared_ptr<Environment> parent;
+  Env_ptr parent;
   std::unordered_map<std::string, Scheme_value> env;
 };
 
