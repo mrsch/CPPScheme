@@ -134,12 +134,8 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       // TODO: Handle error
     }
 
-    auto value = true; // Everythin except #f eval to true
-    if (auto b = cond->get_value<Bool>()) {
-      value = b->get_bool();
-    }
-
-    if (value) {
+    Bool b(cond);
+    if (b.get_bool()) {
       return list[2].eval(env);
     } else {
       return list[3].eval(env);
@@ -201,6 +197,22 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     } else {
       fmt::print("Unbound varable: {}\n", list[1].as_string());
       return Scheme_value{};
+    }
+  } else if (atom.as_string() == "and") {
+    if (list.size() == 1) {
+      return Scheme_value(Bool(true));
+    } else {
+      list.erase(list.begin());
+      Eval_result res;
+      for (auto& test : list) {
+        if ((res = test.eval(env))) {
+          Bool b(*res);
+          if (!b.get_bool()) {
+            return Scheme_value(b);
+          }
+        }
+      }
+      return res;
     }
   } else if (atom.as_string() == "load") {
     // load has to be here because it

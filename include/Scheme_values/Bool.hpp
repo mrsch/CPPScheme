@@ -12,6 +12,7 @@ class Bool
 {
 public:
   explicit Bool(bool b);
+  explicit Bool(Scheme_value val);
 
   std::string as_string();
   Eval_result eval(const Env_ptr& env);

@@ -7,6 +7,14 @@ Bool::Bool(bool b) : b(b)
 {
 }
 
+Bool::Bool(Scheme_value val)
+{
+  b = true;
+  if (auto res = val.get_value<Bool>()) {
+    b = res->get_bool();
+  }
+}
+
 Eval_result Bool::eval(const Env_ptr& /* env */)
 {
   return Scheme_value{*this};
