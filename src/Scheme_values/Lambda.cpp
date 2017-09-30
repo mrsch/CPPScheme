@@ -4,7 +4,7 @@
 #include "Scheme_values/Scheme_value.hpp"
 
 Lambda::Lambda(List arg_list,
-               const std::vector<Scheme_value>& body_expressions,
+               const std::deque<Scheme_value>& body_expressions,
                const std::shared_ptr<Environment>& closure)
   : arg_list(arg_list), body_expressions(body_expressions), closure(closure)
 {

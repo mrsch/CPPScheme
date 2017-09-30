@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 
-List::List(const std::vector<Scheme_value>& list) : list(list)
+List::List(const std::deque<Scheme_value>& list) : list(list)
 {
 }
 
@@ -71,7 +71,7 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
   return fmt::format("Could not evaluate expression: {}", as_string());
 }
 
-const std::vector<Scheme_value>& List::get_list() const
+const std::deque<Scheme_value>& List::get_list() const
 {
   return list;
 }
@@ -99,12 +99,12 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
                  list[1].get_value<List>()) { // Lambda definition
       auto definition_list = func_definition->get_list();
       auto func_name = definition_list[0];
-      std::vector<Scheme_value> params;
+      std::deque<Scheme_value> params;
       for (size_t i = 1; i < definition_list.size(); ++i) {
         params.push_back(definition_list[i]);
       }
 
-      std::vector<Scheme_value> body_expressions;
+      std::deque<Scheme_value> body_expressions;
       for (size_t i = 2; i < list.size(); ++i) {
         body_expressions.emplace_back(list[i]);
       }
@@ -121,7 +121,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
   } else if (atom.as_string() == "quote") {
     return Scheme_value{list[1]};
   } else if (atom.as_string() == "lambda") {
-    std::vector<Scheme_value> body_expressions;
+    std::deque<Scheme_value> body_expressions;
     for (size_t i = 2; i < list.size(); ++i) {
       body_expressions.emplace_back(list[i]);
     }
@@ -145,7 +145,8 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     for (auto& maybe_clause : list) {
       auto clause = maybe_clause.get_value<List>().value();
       auto clause_list = clause.get_list();
-      auto cond = clause_list[0];
+      auto cond = clause_list.front();
+      clause_list.pop_front();
 
       if (auto atom = cond.get_value<Atom>()) {
         if (atom->as_string() == "else") {
@@ -165,13 +166,15 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
         auto clause = maybe_clause.get_value<List>().value();
         auto clause_list = clause.get_list();
 
-        if (auto atom = clause_list[0].get_value<Atom>()) {
+        if (auto atom = clause_list.front().get_value<Atom>()) {
+          clause_list.pop_front();
           if (atom->as_string() == "else") {
             return eval_expressions(clause_list, env);
           }
         }
 
-        if (auto objects = clause_list[0].get_value<List>()) {
+        if (auto objects = clause_list.front().get_value<List>()) {
+          clause_list.pop_front();
           for (auto& object : objects->get_list()) {
             if (key->as_string() == object.as_string()) { // FIXME: Use eqv?
               return eval_expressions(clause_list, env);
@@ -230,6 +233,33 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       }
       return res;
     }
+  } else if (atom.as_string() == "let") {
+    if (list.size() < 3) {
+      return fmt::format("let requires at least 2 arguments, {} given.",
+                         list.size() - 1);
+    }
+
+    if (auto bindings = list[1].get_value<List>()) {
+      Env_ptr let_env = std::make_shared<Environment>(env);
+      for (auto& binding : bindings->get_list()) {
+        if (bindings->get_list().size() != 2) {
+          // TODO: Return useful message
+          return std::string("Error in binding list");
+        }
+
+        // FIXME: Error handling
+        auto var_list = binding.get_value<List>()->get_list();
+        let_env->add_to_env(var_list[0].as_string(), *(var_list[1].eval(env)));
+      }
+
+      list.pop_front();
+      list.pop_front();
+      return eval_expressions(list, let_env);
+
+    } else {
+      return fmt::format("First parameter for let must be a List");
+    }
+
   } else if (atom.as_string() == "load") {
     // load has to be here because it
     // has to be executed in the root
@@ -256,11 +286,11 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
   return {std::string("")};
 }
 
-Eval_result List::eval_expressions(const std::vector<Scheme_value>& expr_list,
+Eval_result List::eval_expressions(const std::deque<Scheme_value>& expr_list,
                                    const Env_ptr& env)
 {
   Eval_result res;
-  for (size_t i = 1; i < expr_list.size(); ++i) {
+  for (size_t i = 0; i < expr_list.size(); ++i) {
     res = expr_list[i].eval(env);
   }
   return res;

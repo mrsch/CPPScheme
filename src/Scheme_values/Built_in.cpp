@@ -20,7 +20,7 @@ std::string Built_in::as_string()
 Eval_result Built_in::execute(const std::shared_ptr<Environment>& env,
                               List args)
 {
-  std::vector<Scheme_value> evaled_args;
+  std::deque<Scheme_value> evaled_args;
   for (auto& arg : args.get_list()) {
     auto result = arg.eval(env);
     if (result) {

@@ -10,7 +10,7 @@ class Scheme_value;
 class Environment;
 
 using Procedure =
-  std::function<Eval_result(const std::vector<Scheme_value>&, const Env_ptr&)>;
+  std::function<Eval_result(const std::deque<Scheme_value>&, const Env_ptr&)>;
 
 class Built_in
 {

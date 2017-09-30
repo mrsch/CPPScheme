@@ -47,7 +47,7 @@ Maybe<List> parse_specials(std::string& expr)
 {
   if (expr[0] == '\'') {
     expr.erase(0, 1);
-    std::vector<Scheme_value> list;
+    std::deque<Scheme_value> list;
     list.emplace_back(Scheme_value(Atom("quote")));
     list.emplace_back(Scheme_value(parse(expr)));
 
@@ -61,7 +61,7 @@ Maybe<List> parse_list(std::string& expr)
 {
   if (expr[0] == '(') {
     expr.erase(0, 1);
-    std::vector<Scheme_value> list;
+    std::deque<Scheme_value> list;
     while (expr[0] != ')') {
       list.emplace_back(Scheme_value(parse(expr)));
     }
@@ -78,7 +78,7 @@ Maybe<Vector> parse_vector(std::string& expr)
 {
   if (expr[0] == '#' && expr[1] == '(') {
     expr.erase(0, 2);
-    std::vector<Scheme_value> vector;
+    std::deque<Scheme_value> vector;
     while (expr[0] != ')') {
       vector.emplace_back(Scheme_value(parse(expr)));
     }

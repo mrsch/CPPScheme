@@ -3,7 +3,7 @@
 #include "Environment.hpp"
 #include "Scheme_values/Scheme_value.hpp"
 
-Vector::Vector(const std::vector<Scheme_value>& vector) : vector(vector)
+Vector::Vector(const std::deque<Scheme_value>& vector) : vector(vector)
 {
 }
 
@@ -24,7 +24,7 @@ Eval_result Vector::eval(const std::shared_ptr<Environment>& env)
   return Scheme_value{*this};
 }
 
-const std::vector<Scheme_value>& Vector::get_vector() const
+const std::deque<Scheme_value>& Vector::get_vector() const
 {
   return vector;
 }

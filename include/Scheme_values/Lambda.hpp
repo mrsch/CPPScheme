@@ -12,7 +12,7 @@ class Lambda
 {
 public:
   Lambda(List arg_list,
-         const std::vector<Scheme_value>& body_expressions,
+         const std::deque<Scheme_value>& body_expressions,
          const Env_ptr& closure);
 
   std::string as_string();
@@ -21,7 +21,7 @@ public:
 
 private:
   List arg_list;
-  std::vector<Scheme_value> body_expressions;
+  std::deque<Scheme_value> body_expressions;
   Env_ptr closure;
 };
 
