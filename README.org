@@ -1,6 +1,7 @@
 * CPPScheme
   Scheme implementation in C++ that depends heavily on C++17s new
   =std::variant= and =std::optional=.
+  Heavily inspired by [[https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours][Write Yourself a Scheme in 48 Hours]].
 
   Uses Haskell-like =Maybe= and =Either= types.
 
@@ -10,7 +11,7 @@
    1. Run =cmake -E chdir build cmake ..= to setup the project
    2. Compile with =cmake --build build=
    3. Run main: =cd bin && ./main=
-   4. Run (non existanst :-()tests: =cd bin && ./unit_test=
+   4. Run ( non existanst :-( )tests: =cd bin && ./unit_test=
 ** Anti Features
    - No proper tail recursion
    - No tests 
