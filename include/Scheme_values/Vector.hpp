@@ -17,7 +17,6 @@ public:
   explicit Vector(const std::deque<Scheme_value>& vector);
 
   std::string as_string();
-  Eval_result eval(const Env_ptr& env);
 
   const std::deque<Scheme_value>& get_vector() const;
 

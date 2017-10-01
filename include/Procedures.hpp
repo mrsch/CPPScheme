@@ -231,12 +231,50 @@ Scheme_value open_image(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 Scheme_value rotate(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  auto image = args[0].get<Image>();
-  auto angle = args[1].get<Number>();
+  if (args.size() == 2) {
+    auto image = args[0].get<Image>();
+    auto angle = args[1].get<Number>();
+    auto res = image->rotate(angle->get_number());
+    return Scheme_value(res);
+  } else {
+    auto image = args[0].get<Image>();
+    auto angle = args[1].get<Number>();
+    auto x_axis = args[2].get<Number>();
+    auto y_axis = args[3].get<Number>();
 
-  auto res = image->rotate(angle->get_number());
+    auto res = image->rotate(
+      angle->get_number(), x_axis->get_number(), y_axis->get_number());
+    return Scheme_value(res);
+  }
+}
+
+Scheme_value above(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  auto image1 = args[0].get<Image>();
+  auto image2 = args[1].get<Image>();
+
+  auto res = image1->above(*image2);
 
   return Scheme_value(res);
+}
+
+Scheme_value beside(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  auto image1 = args[0].get<Image>();
+  auto image2 = args[1].get<Image>();
+
+  auto res = image1->beside(*image2);
+
+  return Scheme_value(res);
+}
+
+Scheme_value save_image(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  auto image1 = args[0].get<Image>();
+  auto name = args[1].get<String>();
+
+  image1->save(name->get_string());
+  return args[0];
 }
 
 Scheme_value show(const std::deque<Scheme_value>& args, const Env_ptr&)

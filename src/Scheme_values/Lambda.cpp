@@ -41,7 +41,7 @@ Eval_result Lambda::execute(const std::shared_ptr<Environment>& env,
     }
   }
 
-  Eval_result result;
+  Eval_result result(std::string("No result"));
   for (auto& body : body_expressions) {
     result = body.eval(temp_env);
     if (!result) {

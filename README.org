@@ -24,6 +24,7 @@
    - Only =floats= as numbers
    - No macros
    - Not optimized
+   - Lots of unnessecary copies
 ** Features
    - Haskell like error handling with =Either= type
    - Scheme values as Sum type with =std::variant=

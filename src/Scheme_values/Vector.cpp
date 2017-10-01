@@ -18,12 +18,6 @@ std::string Vector::as_string()
 
   return res;
 }
-
-Eval_result Vector::eval(const std::shared_ptr<Environment>& env)
-{
-  return Scheme_value{*this};
-}
-
 const std::deque<Scheme_value>& Vector::get_vector() const
 {
   return vector;

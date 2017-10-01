@@ -29,7 +29,8 @@ Scheme_value::eval(const std::shared_ptr<Environment>& env) const
       || std::holds_alternative<Character>(value)
       || std::holds_alternative<Scheme_bool>(value)
       || std::holds_alternative<Number>(value)
-      || std::holds_alternative<String>(value)) {
+      || std::holds_alternative<String>(value)
+      || std::holds_alternative<Vector>(value)) {
     return *this;
   } else if (std::holds_alternative<Symbol>(value)) {
     auto name = std::get<Symbol>(value).as_string();

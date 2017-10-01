@@ -22,7 +22,11 @@ public:
   }
 
   Image rotate(float angle) const;
+  Image rotate(float angle, int x, int y) const;
   Image flip() const;
+  Image above(const Image& other) const;
+  Image beside(const Image& other) const;
+  void save(const std::string& filename);
 
   std::string as_string();
   Eval_result eval(const Env_ptr& env);
@@ -30,7 +34,6 @@ public:
 
 private:
   CImg<unsigned char> image;
-  CImgDisplay display;
 };
 
 #endif // SCHEME_VALUES_GRAPHICS_IMAGE_HPP
