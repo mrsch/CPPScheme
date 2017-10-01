@@ -17,11 +17,13 @@ add_library(scheme-lib
   Scheme_values/Number.cpp
   Scheme_values/String.cpp
   Scheme_values/Vector.cpp
+  Scheme_values/graphics/Image.cpp
   Utils.cpp
   )
 
 target_link_libraries(scheme-lib
   PUBLIC
+  ${CIMG_LIBRARIES}
   PRIVATE
   fmt::fmt-header-only
   stdc++fs)

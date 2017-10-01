@@ -8,11 +8,11 @@
 class Scheme_value;
 class Environment;
 
-class Bool
+class Scheme_bool
 {
 public:
-  explicit Bool(bool b);
-  explicit Bool(Scheme_value val);
+  explicit Scheme_bool(bool b);
+  explicit Scheme_bool(Scheme_value val);
 
   std::string as_string();
   Eval_result eval(const Env_ptr& env);

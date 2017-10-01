@@ -11,6 +11,8 @@
 #include "Scheme_values/Number.hpp"
 #include "Scheme_values/String.hpp"
 #include "Scheme_values/Vector.hpp"
+#include "Scheme_values/graphics/Image.hpp"
+
 #include "Utils.hpp"
 
 #include <optional>
@@ -22,15 +24,17 @@ class Scheme_value
 {
   // TODO: Dotted list/Pair
   using Value = std::variant<Nil,
-                             Atom,
+                             Symbol,
                              List,
                              String,
                              Character,
                              Number,
-                             Bool,
+                             Scheme_bool,
                              Lambda,
                              Built_in,
-                             Vector>;
+                             Vector,
+                             // Custom Scheme values
+                             Image>;
 
 public:
   Scheme_value() = default;
@@ -42,7 +46,7 @@ public:
   explicit Scheme_value(Value value);
 
   template <typename T>
-  Maybe<T> get() const
+  Maybe<T> get()
   {
     if (std::holds_alternative<T>(value)) {
       return std::get<T>(value);
@@ -53,7 +57,6 @@ public:
 
   std::string as_string() const;
   Eval_result eval(const Env_ptr& env) const;
-  Eval_result eval(const Env_ptr& env, List args) const;
 
 private:
   Value value = Nil();

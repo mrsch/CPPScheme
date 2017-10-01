@@ -12,7 +12,7 @@
 
 inline Eval_result eqv(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  return Scheme_value(Bool(args[0].as_string() == args[1].as_string()));
+  return Scheme_value(Scheme_bool(args[0].as_string() == args[1].as_string()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,9 +178,9 @@ Scheme_value gt(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get<Number>().value().get_number()
       > args[1].get<Number>().value().get_number()) {
-    return Scheme_value(Bool(true));
+    return Scheme_value(Scheme_bool(true));
   } else {
-    return Scheme_value(Bool(false));
+    return Scheme_value(Scheme_bool(false));
   }
 }
 
@@ -188,9 +188,9 @@ Scheme_value gte(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get<Number>().value().get_number()
       >= args[1].get<Number>().value().get_number()) {
-    return Scheme_value(Bool(true));
+    return Scheme_value(Scheme_bool(true));
   } else {
-    return Scheme_value(Bool(false));
+    return Scheme_value(Scheme_bool(false));
   }
 }
 
@@ -198,9 +198,9 @@ Scheme_value lt(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get<Number>().value().get_number()
       < args[1].get<Number>().value().get_number()) {
-    return Scheme_value(Bool(true));
+    return Scheme_value(Scheme_bool(true));
   } else {
-    return Scheme_value(Bool(false));
+    return Scheme_value(Scheme_bool(false));
   }
 }
 
@@ -208,9 +208,9 @@ Scheme_value lte(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get<Number>().value().get_number()
       <= args[1].get<Number>().value().get_number()) {
-    return Scheme_value(Bool(true));
+    return Scheme_value(Scheme_bool(true));
   } else {
-    return Scheme_value(Bool(false));
+    return Scheme_value(Scheme_bool(false));
   }
 }
 
@@ -218,10 +218,35 @@ Scheme_value num_equal(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   if (args[0].get<Number>().value().get_number()
       == args[1].get<Number>().value().get_number()) {
-    return Scheme_value(Bool(true));
+    return Scheme_value(Scheme_bool(true));
   } else {
-    return Scheme_value(Bool(false));
+    return Scheme_value(Scheme_bool(false));
   }
+}
+
+Scheme_value open_image(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  return Scheme_value(Image(args[0].get<String>()->get_string()));
+}
+
+Scheme_value rotate(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  auto image = args[0].get<Image>();
+  auto angle = args[1].get<Number>();
+
+  auto res = image->rotate(angle->get_number());
+
+  return Scheme_value(res);
+}
+
+Scheme_value show(const std::deque<Scheme_value>& args, const Env_ptr&)
+{
+  auto image = args[0].get<Image>();
+  auto angle = args[1].get<Number>();
+
+  image->show();
+
+  return args[0];
 }
 
 #endif // PROCEDURES_HPP

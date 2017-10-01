@@ -42,9 +42,3 @@ Eval_result Scheme_value::eval(const std::shared_ptr<Environment>& env) const
 {
   return std::visit(Eval_visitor(env), value);
 }
-
-Eval_result Scheme_value::eval(const std::shared_ptr<Environment>& env,
-                               List args) const
-{
-  return std::visit(Eval_visitor(env, args), value);
-}

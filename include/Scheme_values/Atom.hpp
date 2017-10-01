@@ -9,10 +9,10 @@
 class Scheme_value;
 class Environment;
 
-class Atom
+class Symbol
 {
 public:
-  explicit Atom(const std::string& atom);
+  explicit Symbol(const std::string& atom);
 
   Eval_result eval(const Env_ptr& env);
   std::string as_string() const;

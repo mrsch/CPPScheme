@@ -19,22 +19,22 @@ Scheme_value parse(std::string& expr)
   while (expr.size() != 0) {
     trim(expr);
 
-    if (auto res = parse_number(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_atom(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_vector(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_string(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_character(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_list(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_specials(expr); res.has_value()) {
-      return Scheme_value(res.value());
-    } else if (auto res = parse_bool(expr); res.has_value()) {
-      return Scheme_value(res.value());
+    if (auto res = parse_number(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_atom(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_vector(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_string(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_character(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_list(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_specials(expr)) {
+      return Scheme_value(*res);
+    } else if (auto res = parse_bool(expr)) {
+      return Scheme_value(*res);
     } else {
       parse_comment(expr);
     }
@@ -48,7 +48,7 @@ Maybe<List> parse_specials(std::string& expr)
   if (expr[0] == '\'') {
     expr.erase(0, 1);
     std::deque<Scheme_value> list;
-    list.emplace_back(Scheme_value(Atom("quote")));
+    list.emplace_back(Scheme_value(Symbol("quote")));
     list.emplace_back(Scheme_value(parse(expr)));
 
     return List(list);
@@ -91,10 +91,10 @@ Maybe<Vector> parse_vector(std::string& expr)
   return {};
 }
 
-Maybe<Atom> parse_atom(std::string& expr)
+Maybe<Symbol> parse_atom(std::string& expr)
 {
   if (std::isalpha(expr[0]) || is_symbol(expr[0])) {
-    return Atom(substr_and_remove(expr, expr.find_first_of(" )\n")));
+    return Symbol(substr_and_remove(expr, expr.find_first_of(" )\n")));
   } else {
     return {};
   }
@@ -118,16 +118,16 @@ Maybe<Character> parse_character(std::string& expr)
   }
 }
 
-Maybe<Bool> parse_bool(std::string& expr)
+Maybe<Scheme_bool> parse_bool(std::string& expr)
 {
   if (expr.find("#f") == 0) {
     expr.erase(0, 2);
     trim(expr);
-    return Bool(false);
+    return Scheme_bool(false);
   } else if (expr.find("#t") == 0) {
     expr.erase(0, 2);
     trim(expr);
-    return Bool(true);
+    return Scheme_bool(true);
   } else {
     return {};
   }

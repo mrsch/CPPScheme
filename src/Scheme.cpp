@@ -86,4 +86,9 @@ void Scheme::build_default_environment()
   default_env->add_to_env("<", Scheme_value(Built_in(lt)));
   default_env->add_to_env("<=", Scheme_value(Built_in(lte)));
   default_env->add_to_env("=", Scheme_value(Built_in(num_equal)));
+
+  // Graphic
+  default_env->add_to_env("open-image", Scheme_value(Built_in(open_image)));
+  default_env->add_to_env("rotate", Scheme_value(Built_in(rotate)));
+  default_env->add_to_env("show", Scheme_value(Built_in(show)));
 }

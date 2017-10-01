@@ -3,29 +3,29 @@
 #include "Environment.hpp"
 #include "Scheme_values/Scheme_value.hpp"
 
-Bool::Bool(bool b) : b(b)
+Scheme_bool::Scheme_bool(bool b) : b(b)
 {
 }
 
-Bool::Bool(Scheme_value val)
+Scheme_bool::Scheme_bool(Scheme_value val)
 {
   b = true;
-  if (auto res = val.get<Bool>()) {
+  if (auto res = val.get<Scheme_bool>()) {
     b = res->get_bool();
   }
 }
 
-Eval_result Bool::eval(const Env_ptr& /* env */)
+Eval_result Scheme_bool::eval(const Env_ptr& /* env */)
 {
   return Scheme_value{*this};
 }
 
-std::string Bool::as_string()
+std::string Scheme_bool::as_string()
 {
   return b ? "#t" : "#f";
 }
 
-bool Bool::get_bool() const
+bool Scheme_bool::get_bool() const
 {
   return b;
 }

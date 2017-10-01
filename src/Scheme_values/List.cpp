@@ -33,7 +33,7 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
     return Scheme_value{*this};
   }
 
-  if (auto maybe_atom = list[0].get<Atom>()) { // First check special forms
+  if (auto maybe_atom = list[0].get<Symbol>()) { // First check special forms
     auto maybe = eval_special_forms(*maybe_atom, env);
     if (maybe) {
       return *maybe;
@@ -75,7 +75,7 @@ const std::deque<Scheme_value>& List::get_list() const
   return list;
 }
 
-Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
+Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
 {
   // Primitive Expressions
   if (atom.as_string() == "define") {
@@ -86,7 +86,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
         as_string());
     }
 
-    if (auto atom = list[1].get<Atom>()) {
+    if (auto atom = list[1].get<Symbol>()) {
       auto result = list[2].eval(env);
       if (!result) {
         return result;
@@ -133,7 +133,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       // TODO: Handle error
     }
 
-    Bool b(cond);
+    Scheme_bool b(cond);
     if (b.get_bool()) {
       return list[2].eval(env);
     } else {
@@ -147,12 +147,12 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
       auto cond = clause_list.front();
       clause_list.pop_front();
 
-      if (auto atom = cond.get<Atom>()) {
+      if (auto atom = cond.get<Symbol>()) {
         if (atom->as_string() == "else") {
           return eval_expressions(clause_list, env);
         }
       } else if (auto result = cond.eval(env)) {
-        if (result->get<Bool>()->get_bool()) {
+        if (result->get<Scheme_bool>()->get_bool()) {
           return eval_expressions(clause_list, env);
         }
       }
@@ -165,7 +165,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
         auto clause = maybe_clause.get<List>().value();
         auto clause_list = clause.get_list();
 
-        if (auto atom = clause_list.front().get<Atom>()) {
+        if (auto atom = clause_list.front().get<Symbol>()) {
           clause_list.pop_front();
           if (atom->as_string() == "else") {
             return eval_expressions(clause_list, env);
@@ -202,13 +202,13 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     }
   } else if (atom.as_string() == "and") {
     if (list.size() == 1) {
-      return Scheme_value(Bool(true));
+      return Scheme_value(Scheme_bool(true));
     } else {
       list.erase(list.begin());
       Eval_result res;
       for (auto& test : list) {
         if ((res = test.eval(env))) {
-          Bool b(*res);
+          Scheme_bool b(*res);
           if (!b.get_bool()) {
             return Scheme_value(b);
           }
@@ -218,13 +218,13 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     }
   } else if (atom.as_string() == "or") {
     if (list.size() == 1) {
-      return Scheme_value(Bool(false));
+      return Scheme_value(Scheme_bool(false));
     } else {
       list.erase(list.begin());
       Eval_result res;
       for (auto& test : list) {
         if ((res = test.eval(env))) {
-          Bool b(*res);
+          Scheme_bool b(*res);
           if (b.get_bool()) {
             return Scheme_value(b);
           }

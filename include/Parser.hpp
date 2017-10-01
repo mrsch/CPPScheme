@@ -15,8 +15,8 @@
 
 Scheme_value parse(std::string& expr);
 
-Maybe<Atom> parse_atom(std::string& expr);
-Maybe<Bool> parse_bool(std::string& expr);
+Maybe<Symbol> parse_atom(std::string& expr);
+Maybe<Scheme_bool> parse_bool(std::string& expr);
 Maybe<Character> parse_character(std::string& expr);
 Maybe<String> parse_string(std::string& expr);
 Maybe<List> parse_list(std::string& expr);
