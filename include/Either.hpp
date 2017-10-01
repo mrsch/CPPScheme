@@ -37,7 +37,22 @@ public:
     return &std::get<Left>(val);
   }
 
+  const Left& operator*() const
+  {
+    return std::get<Left>(val);
+  }
+
+  const Left* operator->() const
+  {
+    return &std::get<Left>(val);
+  }
+
   Right& error()
+  {
+    return std::get<Right>(val);
+  }
+
+  const Right& error() const
   {
     return std::get<Right>(val);
   }

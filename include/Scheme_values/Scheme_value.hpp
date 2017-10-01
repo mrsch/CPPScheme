@@ -56,7 +56,7 @@ public:
   }
 
   std::string as_string() const;
-  Eval_result eval(const Env_ptr& env) const;
+  const Eval_result eval(const Env_ptr& env) const;
 
 private:
   Value value = Nil();

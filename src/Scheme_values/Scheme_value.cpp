@@ -22,7 +22,8 @@ std::string Scheme_value::as_string() const
   return std::visit(Print_visitor{}, value);
 }
 
-Eval_result Scheme_value::eval(const std::shared_ptr<Environment>& env) const
+const Eval_result
+Scheme_value::eval(const std::shared_ptr<Environment>& env) const
 {
   if (std::holds_alternative<Nil>(value)
       || std::holds_alternative<Character>(value)
