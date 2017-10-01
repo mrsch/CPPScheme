@@ -10,7 +10,7 @@ Bool::Bool(bool b) : b(b)
 Bool::Bool(Scheme_value val)
 {
   b = true;
-  if (auto res = val.get_value<Bool>()) {
+  if (auto res = val.get<Bool>()) {
     b = res->get_bool();
   }
 }

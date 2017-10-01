@@ -42,7 +42,7 @@ public:
   explicit Scheme_value(Value value);
 
   template <typename T>
-  Maybe<T> get_value() const
+  Maybe<T> get() const
   {
     if (std::holds_alternative<T>(value)) {
       return std::get<T>(value);

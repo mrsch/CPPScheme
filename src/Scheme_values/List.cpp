@@ -33,8 +33,7 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
     return Scheme_value{*this};
   }
 
-  if (auto maybe_atom =
-        list[0].get_value<Atom>()) { // First check special forms
+  if (auto maybe_atom = list[0].get<Atom>()) { // First check special forms
     auto maybe = eval_special_forms(*maybe_atom, env);
     if (maybe) {
       return *maybe;
@@ -58,11 +57,11 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
                        first.error());
   }
 
-  if (auto maybe_builtin = first->get_value<Built_in>()) {
+  if (auto maybe_builtin = first->get<Built_in>()) {
     auto builtin = *maybe_builtin;
     list.erase(list.begin());
     return builtin.execute(env, *this);
-  } else if (auto maybe_lambda = first->get_value<Lambda>()) {
+  } else if (auto maybe_lambda = first->get<Lambda>()) {
     auto lambda = *maybe_lambda;
     list.erase(list.begin());
     return lambda.execute(env, *this);
@@ -87,7 +86,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
         as_string());
     }
 
-    if (auto atom = list[1].get_value<Atom>()) {
+    if (auto atom = list[1].get<Atom>()) {
       auto result = list[2].eval(env);
       if (!result) {
         return result;
@@ -96,7 +95,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
         return Scheme_value{*atom};
       }
     } else if (auto func_definition =
-                 list[1].get_value<List>()) { // Lambda definition
+                 list[1].get<List>()) { // Lambda definition
       auto definition_list = func_definition->get_list();
       auto func_name = definition_list[0];
       std::deque<Scheme_value> params;
@@ -127,7 +126,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     }
 
     return Scheme_value{
-      Lambda(list[1].get_value<List>().value(), body_expressions, env)};
+      Lambda(list[1].get<List>().value(), body_expressions, env)};
   } else if (atom.as_string() == "if") {
     auto cond = list[1].eval(env);
     if (!cond) {
@@ -143,17 +142,17 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
   } else if (atom.as_string() == "cond") {
     list.erase(list.begin());
     for (auto& maybe_clause : list) {
-      auto clause = maybe_clause.get_value<List>().value();
+      auto clause = maybe_clause.get<List>().value();
       auto clause_list = clause.get_list();
       auto cond = clause_list.front();
       clause_list.pop_front();
 
-      if (auto atom = cond.get_value<Atom>()) {
+      if (auto atom = cond.get<Atom>()) {
         if (atom->as_string() == "else") {
           return eval_expressions(clause_list, env);
         }
       } else if (auto result = cond.eval(env)) {
-        if (result->get_value<Bool>()->get_bool()) {
+        if (result->get<Bool>()->get_bool()) {
           return eval_expressions(clause_list, env);
         }
       }
@@ -163,17 +162,17 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     if (auto key = list[0].eval(env)) {
       list.erase(list.begin());
       for (auto& maybe_clause : list) {
-        auto clause = maybe_clause.get_value<List>().value();
+        auto clause = maybe_clause.get<List>().value();
         auto clause_list = clause.get_list();
 
-        if (auto atom = clause_list.front().get_value<Atom>()) {
+        if (auto atom = clause_list.front().get<Atom>()) {
           clause_list.pop_front();
           if (atom->as_string() == "else") {
             return eval_expressions(clause_list, env);
           }
         }
 
-        if (auto objects = clause_list.front().get_value<List>()) {
+        if (auto objects = clause_list.front().get<List>()) {
           clause_list.pop_front();
           for (auto& object : objects->get_list()) {
             if (key->as_string() == object.as_string()) { // FIXME: Use eqv?
@@ -239,7 +238,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
                          list.size() - 1);
     }
 
-    if (auto bindings = list[1].get_value<List>()) {
+    if (auto bindings = list[1].get<List>()) {
       Env_ptr let_env = std::make_shared<Environment>(env);
       for (auto& binding : bindings->get_list()) {
         if (bindings->get_list().size() != 2) {
@@ -248,7 +247,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
         }
 
         // FIXME: Error handling
-        auto var_list = binding.get_value<List>()->get_list();
+        auto var_list = binding.get<List>()->get_list();
         let_env->add_to_env(var_list[0].as_string(), *(var_list[1].eval(env)));
       }
 
@@ -269,7 +268,7 @@ Eval_result List::eval_special_forms(const Atom& atom, const Env_ptr& env)
     // Environment
     std::ifstream source;
 
-    source.open(list[1].get_value<String>().value().get_string(), std::ios::in);
+    source.open(list[1].get<String>().value().get_string(), std::ios::in);
 
     if (source.is_open()) {
       std::string program((std::istreambuf_iterator<char>(source)),

@@ -21,7 +21,6 @@
    - No proper tail recursion
    - No tests 
    - Not all standard procedures implemented
-   - No case
    - Only =floats= as numbers
    - No macros
    - Not optimized

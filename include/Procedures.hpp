@@ -21,7 +21,7 @@ inline Eval_result eqv(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result display(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (auto string = args[0].get_value<String>()) {
+  if (auto string = args[0].get<String>()) {
     fmt::print("{}\n", string->get_string());
   } else {
     fmt::print("{}\n", args[0].as_string());
@@ -41,7 +41,7 @@ inline Eval_result list(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result cons(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (auto list = args[1].get_value<List>()) {
+  if (auto list = args[1].get<List>()) {
     std::deque<Scheme_value> l;
     l.push_back(args[0]);
     for (auto& v : list.value().get_list()) {
@@ -55,9 +55,9 @@ inline Eval_result cons(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result append(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  auto first_list = args[0].get_value<List>().value().get_list();
+  auto first_list = args[0].get<List>().value().get_list();
 
-  auto second_list = args[1].get_value<List>().value().get_list();
+  auto second_list = args[1].get<List>().value().get_list();
   for (auto& val : second_list) {
     first_list.push_back(val);
   }
@@ -67,12 +67,12 @@ inline Eval_result append(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result car(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  return args[0].get_value<List>().value().get_list()[0];
+  return args[0].get<List>().value().get_list()[0];
 }
 
 Scheme_value cdr(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  auto list = args[0].get_value<List>().value().get_list();
+  auto list = args[0].get<List>().value().get_list();
   auto result = std::deque<Scheme_value>(list.begin() + 1, list.end());
   return Scheme_value(List(result));
 }
@@ -96,12 +96,12 @@ inline Eval_result apply(const std::deque<Scheme_value>& args,
   app.push_back(args.back());
   auto appended_list = append(app, env);
   if (appended_list) {
-    arg_list = *((*appended_list).get_value<List>());
+    arg_list = *((*appended_list).get<List>());
   }
 
-  if (auto lambda = args[0].get_value<Lambda>()) {
+  if (auto lambda = args[0].get<Lambda>()) {
     return lambda->execute(env, arg_list);
-  } else if (auto lambda = args[0].get_value<Built_in>()) {
+  } else if (auto lambda = args[0].get<Built_in>()) {
     return lambda->execute(env, arg_list);
   }
 
@@ -116,7 +116,7 @@ inline Eval_result add(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
   float sum = 0;
   for (auto& arg : args) {
-    sum += arg.get_value<Number>().value().get_number();
+    sum += arg.get<Number>().value().get_number();
   }
 
   return Scheme_value(Number(sum));
@@ -124,7 +124,7 @@ inline Eval_result add(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result sub(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  auto res = args[0].get_value<Number>().value().get_number();
+  auto res = args[0].get<Number>().value().get_number();
 
   if (args.size() == 1) {
     return Scheme_value(Number(-res));
@@ -132,7 +132,7 @@ inline Eval_result sub(const std::deque<Scheme_value>& args, const Env_ptr&)
 
   res *= 2;
   for (auto& arg : args) {
-    res -= arg.get_value<Number>().value().get_number();
+    res -= arg.get<Number>().value().get_number();
   }
 
   return Scheme_value(Number(res));
@@ -143,7 +143,7 @@ inline Eval_result mul(const std::deque<Scheme_value>& args, const Env_ptr&)
   float res = 1;
 
   for (auto& arg : args) {
-    res *= arg.get_value<Number>().value().get_number();
+    res *= arg.get<Number>().value().get_number();
   }
 
   return Scheme_value(Number(res));
@@ -151,12 +151,12 @@ inline Eval_result mul(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result divide(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  auto res = args[0].get_value<Number>().value().get_number();
+  auto res = args[0].get<Number>().value().get_number();
 
   res *= res;
 
   for (auto& arg : args) {
-    res /= arg.get_value<Number>().value().get_number();
+    res /= arg.get<Number>().value().get_number();
   }
 
   return Scheme_value(Number(res));
@@ -164,8 +164,8 @@ inline Eval_result divide(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 inline Eval_result modulo(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  int x = args[0].get_value<Number>().value().get_number();
-  int y = args[1].get_value<Number>().value().get_number();
+  int x = args[0].get<Number>().value().get_number();
+  int y = args[1].get<Number>().value().get_number();
 
   return Scheme_value(Number(x % y));
 }
@@ -176,8 +176,8 @@ inline Eval_result modulo(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 Scheme_value gt(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (args[0].get_value<Number>().value().get_number()
-      > args[1].get_value<Number>().value().get_number()) {
+  if (args[0].get<Number>().value().get_number()
+      > args[1].get<Number>().value().get_number()) {
     return Scheme_value(Bool(true));
   } else {
     return Scheme_value(Bool(false));
@@ -186,8 +186,8 @@ Scheme_value gt(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 Scheme_value gte(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (args[0].get_value<Number>().value().get_number()
-      >= args[1].get_value<Number>().value().get_number()) {
+  if (args[0].get<Number>().value().get_number()
+      >= args[1].get<Number>().value().get_number()) {
     return Scheme_value(Bool(true));
   } else {
     return Scheme_value(Bool(false));
@@ -196,8 +196,8 @@ Scheme_value gte(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 Scheme_value lt(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (args[0].get_value<Number>().value().get_number()
-      < args[1].get_value<Number>().value().get_number()) {
+  if (args[0].get<Number>().value().get_number()
+      < args[1].get<Number>().value().get_number()) {
     return Scheme_value(Bool(true));
   } else {
     return Scheme_value(Bool(false));
@@ -206,8 +206,8 @@ Scheme_value lt(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 Scheme_value lte(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (args[0].get_value<Number>().value().get_number()
-      <= args[1].get_value<Number>().value().get_number()) {
+  if (args[0].get<Number>().value().get_number()
+      <= args[1].get<Number>().value().get_number()) {
     return Scheme_value(Bool(true));
   } else {
     return Scheme_value(Bool(false));
@@ -216,8 +216,8 @@ Scheme_value lte(const std::deque<Scheme_value>& args, const Env_ptr&)
 
 Scheme_value num_equal(const std::deque<Scheme_value>& args, const Env_ptr&)
 {
-  if (args[0].get_value<Number>().value().get_number()
-      == args[1].get_value<Number>().value().get_number()) {
+  if (args[0].get<Number>().value().get_number()
+      == args[1].get<Number>().value().get_number()) {
     return Scheme_value(Bool(true));
   } else {
     return Scheme_value(Bool(false));
