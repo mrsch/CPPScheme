@@ -11,8 +11,3 @@ std::string Character::as_string() const
 {
   return "'" + std::string(1, value) + "'";
 }
-
-Eval_result Character::eval(const Env_ptr& /* env */)
-{
-  return Eval_result(Scheme_value{*this});
-}

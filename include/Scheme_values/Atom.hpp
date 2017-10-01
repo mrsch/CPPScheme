@@ -14,7 +14,6 @@ class Symbol
 public:
   explicit Symbol(const std::string& atom);
 
-  Eval_result eval(const Env_ptr& env);
   std::string as_string() const;
 
 private:

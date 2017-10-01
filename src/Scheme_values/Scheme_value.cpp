@@ -2,6 +2,7 @@
 
 #include "Environment.hpp"
 
+#include <fmt/format.h>
 #include <iostream>
 
 struct Print_visitor {
@@ -10,23 +11,6 @@ struct Print_visitor {
   {
     return value.as_string();
   }
-};
-
-struct Eval_visitor {
-  explicit Eval_visitor(const std::shared_ptr<Environment>& env) : env(env){};
-  explicit Eval_visitor(const std::shared_ptr<Environment>& env,
-                        const List& args)
-    : env(env), args(args){};
-
-  template <typename T>
-  Eval_result operator()(T value) const
-  {
-    return value.eval(env);
-  }
-
-private:
-  const std::shared_ptr<Environment>& env;
-  List args;
 };
 
 Scheme_value::Scheme_value(Value value) : value(value)
@@ -40,5 +24,26 @@ std::string Scheme_value::as_string() const
 
 Eval_result Scheme_value::eval(const std::shared_ptr<Environment>& env) const
 {
-  return std::visit(Eval_visitor(env), value);
+  if (std::holds_alternative<Nil>(value)
+      || std::holds_alternative<Character>(value)
+      || std::holds_alternative<Scheme_bool>(value)
+      || std::holds_alternative<Number>(value)
+      || std::holds_alternative<String>(value)) {
+    return *this;
+  } else if (std::holds_alternative<Symbol>(value)) {
+    auto name = std::get<Symbol>(value).as_string();
+    if (auto res = env->get(name)) {
+      return *res;
+    } else {
+      return fmt::format("Unbound variable: {}\n", name);
+    }
+  } else if (std::holds_alternative<Built_in>(value)) {
+    return Scheme_value{String("Built-in procedure")};
+  } else if (std::holds_alternative<Lambda>(value)) {
+    return Scheme_value{String("Defined lambda")};
+  } else if (std::holds_alternative<List>(value)) {
+    return std::get<List>(value).eval(env);
+  } else {
+    std::cout << "ERROR: Eval not handled!" << '\n';
+  }
 }

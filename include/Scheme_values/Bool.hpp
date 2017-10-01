@@ -15,8 +15,6 @@ public:
   explicit Scheme_bool(Scheme_value val);
 
   std::string as_string();
-  Eval_result eval(const Env_ptr& env);
-
   bool get_bool() const;
 
 private:

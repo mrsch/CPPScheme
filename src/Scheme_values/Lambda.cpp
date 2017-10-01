@@ -10,11 +10,6 @@ Lambda::Lambda(List arg_list,
 {
 }
 
-Eval_result Lambda::eval(const std::shared_ptr<Environment>& /* env */)
-{
-  return Scheme_value{String("Defined lambda")};
-}
-
 std::string Lambda::as_string()
 {
   std::string result = "(lambda ";
@@ -29,18 +24,19 @@ std::string Lambda::as_string()
 }
 
 Eval_result Lambda::execute(const std::shared_ptr<Environment>& env,
-                            List args) const
+                            const std::deque<Scheme_value>& args) const
 {
   // TODO: Switch for dynamic/lexical scoping
   auto temp_env = std::make_shared<Environment>(closure);
 
   auto& list = arg_list.get_list();
   for (size_t i = 0; i < list.size(); ++i) {
-    auto evaled_arg = args.get_list()[i].eval(env);
+    auto evaled_arg = args[i].eval(env);
     if (evaled_arg) {
       temp_env->add_to_env(list[i].as_string(), *evaled_arg);
     } else {
       // TODO: error message
+      std::cout << "Unhandled error in lambda execute :-(" << '\n';
       return evaled_arg;
     }
   }
@@ -49,6 +45,7 @@ Eval_result Lambda::execute(const std::shared_ptr<Environment>& env,
   for (auto& body : body_expressions) {
     result = body.eval(temp_env);
     if (!result) {
+      std::cout << "Unhandled error in lambda execute :-(" << '\n';
       // TODO: Error message
       return result;
     }

@@ -60,6 +60,7 @@ set(EXT_PROJECTS_DIR
   ${PROJECT_SOURCE_DIR}/thirdparty)
 
 add_subdirectory(${EXT_PROJECTS_DIR}/fmtlib EXCLUDE_FROM_ALL)
+
 include_directories(SYSTEM ${EXT_PROJECTS_DIR}/CImg/)
 set (CIMG_LIBRARIES)
 if(NOT WIN32)
@@ -72,7 +73,7 @@ if(NOT WIN32)
     ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
-
+include_directories(SYSTEM ${EXT_PROJECTS_DIR}/range-v3/include)
 
 ## #################################################################
 ## Source Path

@@ -15,7 +15,6 @@ public:
   explicit String(const std::string& str);
 
   std::string as_string() const;
-  Eval_result eval(const Env_ptr& env);
 
   std::string get_string() const;
 

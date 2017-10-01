@@ -16,8 +16,8 @@ public:
          const Env_ptr& closure);
 
   std::string as_string();
-  Eval_result eval(const Env_ptr& env);
-  Eval_result execute(const Env_ptr& env, List args) const;
+  Eval_result execute(const Env_ptr& env,
+                      const std::deque<Scheme_value>& args) const;
 
 private:
   List arg_list;

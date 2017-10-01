@@ -6,12 +6,15 @@
 #include <fmt/format.h>
 #include <fstream>
 #include <iostream>
+#include <range/v3/view.hpp>
+
+using namespace ranges;
 
 List::List(const std::deque<Scheme_value>& list) : list(list)
 {
 }
 
-std::string List::as_string()
+std::string List::as_string() const
 {
   if (list.size() == 0) {
     return "()";
@@ -27,7 +30,7 @@ std::string List::as_string()
   return res;
 }
 
-Eval_result List::eval(const std::shared_ptr<Environment>& env)
+Eval_result List::eval(const std::shared_ptr<Environment>& env) const
 {
   if (list.size() == 0) { // Empty list, return ()
     return Scheme_value{*this};
@@ -50,6 +53,7 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
 
   // No Special syntax. Check for lamba/bultin bindings
   auto first = list[0].eval(env);
+  auto list_view = list | view::drop(1);
 
   if (!first) {
     return fmt::format("Could not evaluate expression: {}\nMessage: {}",
@@ -59,12 +63,10 @@ Eval_result List::eval(const std::shared_ptr<Environment>& env)
 
   if (auto maybe_builtin = first->get<Built_in>()) {
     auto builtin = *maybe_builtin;
-    list.erase(list.begin());
-    return builtin.execute(env, *this);
+    return builtin.execute(env, list_view);
   } else if (auto maybe_lambda = first->get<Lambda>()) {
     auto lambda = *maybe_lambda;
-    list.erase(list.begin());
-    return lambda.execute(env, *this);
+    return lambda.execute(env, list_view);
   }
 
   return fmt::format("Could not evaluate expression: {}", as_string());
@@ -75,7 +77,8 @@ const std::deque<Scheme_value>& List::get_list() const
   return list;
 }
 
-Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
+Eval_result List::eval_special_forms(const Symbol& atom,
+                                     const Env_ptr& env) const
 {
   // Primitive Expressions
   if (atom.as_string() == "define") {
@@ -140,8 +143,8 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
       return list[3].eval(env);
     }
   } else if (atom.as_string() == "cond") {
-    list.erase(list.begin());
-    for (auto& maybe_clause : list) {
+    auto list_view = list | view::drop(1);
+    for (auto& maybe_clause : list_view) {
       auto clause = maybe_clause.get<List>().value();
       auto clause_list = clause.get_list();
       auto cond = clause_list.front();
@@ -158,10 +161,9 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
       }
     }
   } else if (atom.as_string() == "case") {
-    list.erase(list.begin());
-    if (auto key = list[0].eval(env)) {
-      list.erase(list.begin());
-      for (auto& maybe_clause : list) {
+    if (auto key = list[1].eval(env)) {
+      auto list_view = list | view::drop(2);
+      for (auto& maybe_clause : list_view) {
         auto clause = maybe_clause.get<List>().value();
         auto clause_list = clause.get_list();
 
@@ -195,7 +197,7 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
         // TODO: handle_error
       }
 
-      return Scheme_value{list[1]};
+      return list[1];
     } else {
       fmt::print("Unbound varable: {}\n", list[1].as_string());
       return Scheme_value{};
@@ -204,9 +206,9 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
     if (list.size() == 1) {
       return Scheme_value(Scheme_bool(true));
     } else {
-      list.erase(list.begin());
+      auto list_view = list | view::drop(1);
       Eval_result res;
-      for (auto& test : list) {
+      for (auto& test : list_view) {
         if ((res = test.eval(env))) {
           Scheme_bool b(*res);
           if (!b.get_bool()) {
@@ -220,9 +222,9 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
     if (list.size() == 1) {
       return Scheme_value(Scheme_bool(false));
     } else {
-      list.erase(list.begin());
+      auto list_view = list | view::drop(1);
       Eval_result res;
-      for (auto& test : list) {
+      for (auto& test : list_view) {
         if ((res = test.eval(env))) {
           Scheme_bool b(*res);
           if (b.get_bool()) {
@@ -251,17 +253,16 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
         let_env->add_to_env(var_list[0].as_string(), *(var_list[1].eval(env)));
       }
 
-      list.pop_front();
-      list.pop_front();
-      return eval_expressions(list, let_env);
+      auto list_view = list | view::drop(2);
+      return eval_expressions(list_view, let_env);
 
     } else {
       return fmt::format("First parameter for let must be a List");
     }
 
   } else if (atom.as_string() == "begin") {
-    list.pop_front();
-    return eval_expressions(list, env);
+    auto list_view = list | view::drop(1);
+    return eval_expressions(list_view, env);
   } else if (atom.as_string() == "load") {
     // load has to be here because it
     // has to be executed in the root
@@ -289,7 +290,7 @@ Eval_result List::eval_special_forms(const Symbol& atom, const Env_ptr& env)
 }
 
 Eval_result List::eval_expressions(const std::deque<Scheme_value>& expr_list,
-                                   const Env_ptr& env)
+                                   const Env_ptr& env) const
 {
   Eval_result res;
   for (size_t i = 0; i < expr_list.size(); ++i) {

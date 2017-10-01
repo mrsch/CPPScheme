@@ -14,7 +14,6 @@ public:
   explicit Character(char c);
 
   std::string as_string() const;
-  Eval_result eval(const Env_ptr& env);
 
 private:
   char value;

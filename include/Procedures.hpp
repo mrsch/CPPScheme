@@ -100,9 +100,9 @@ inline Eval_result apply(const std::deque<Scheme_value>& args,
   }
 
   if (auto lambda = args[0].get<Lambda>()) {
-    return lambda->execute(env, arg_list);
+    return lambda->execute(env, arg_list.get_list());
   } else if (auto lambda = args[0].get<Built_in>()) {
-    return lambda->execute(env, arg_list);
+    return lambda->execute(env, arg_list.get_list());
   }
 
   // TODO: return error

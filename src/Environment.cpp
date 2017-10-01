@@ -12,7 +12,7 @@ void Environment::add_to_env(const std::string& key, Scheme_value value)
   env[key] = value;
 }
 
-std::optional<Scheme_value> Environment::get(const std::string& key)
+Maybe<Scheme_value> Environment::get(const std::string& key)
 {
   if (auto res = get_from_this(key)) {
     return res;

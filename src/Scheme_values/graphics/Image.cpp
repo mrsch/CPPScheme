@@ -31,7 +31,7 @@ Image Image::flip() const
 
 Eval_result Image::eval(const Env_ptr& /* env */)
 {
-  return Scheme_value{*this};
+  // return Scheme_value{*this};
 }
 
 void Image::show()

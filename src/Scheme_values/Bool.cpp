@@ -15,11 +15,6 @@ Scheme_bool::Scheme_bool(Scheme_value val)
   }
 }
 
-Eval_result Scheme_bool::eval(const Env_ptr& /* env */)
-{
-  return Scheme_value{*this};
-}
-
 std::string Scheme_bool::as_string()
 {
   return b ? "#t" : "#f";

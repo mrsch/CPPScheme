@@ -14,7 +14,6 @@ public:
   explicit Number(float number);
 
   std::string as_string() const;
-  Eval_result eval(const Env_ptr& env);
 
   float get_number() const
   {

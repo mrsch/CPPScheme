@@ -14,7 +14,6 @@ public:
   Nil();
 
   std::string as_string();
-  Eval_result eval(const Env_ptr& env);
 };
 
 #endif // SCHEME_VALUES_NIL_HPP

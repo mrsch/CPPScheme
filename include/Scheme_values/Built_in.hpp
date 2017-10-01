@@ -18,8 +18,8 @@ public:
   explicit Built_in(Procedure proc);
 
   std::string as_string();
-  Eval_result eval(const Env_ptr& env);
-  Eval_result execute(const Env_ptr& env, List args);
+  Eval_result execute(const Env_ptr& env,
+                      const std::deque<Scheme_value>& args) const;
 
 private:
   Procedure proc;
