@@ -11,7 +11,7 @@
 *** Required dependencies
     - [[http://thrysoee.dk/editline/][editline]]
 *** Get source
-    =git clone --recursive https://git.devlodge.de/mario/CPPScheme.git=
+    =git clone --recursive https://github.com/mrsch/CPPScheme.git=
 *** Build
     1. Run =cmake -E chdir build cmake ..= to setup the project
     2. Compile with =cmake --build build=
