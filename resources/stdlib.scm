@@ -37,11 +37,6 @@
 (define (map func lst)      (foldr (lambda (x y) (cons (func x) y)) '() lst)) ;; TODO: multiple lists 1 list for each argument
 (define (filter pred lst)   (foldr (lambda (x y) (if (pred x) (cons x y) y)) '() lst))
 
-;; (define (and . lst) (fold && #t lst))
-;; (define (or . lst) (fold || #f lst))
-;; (define (max first . rest) (fold (lambda (old new) (if (> old new) old new)) first rest))
-;; (define (min first . rest) (fold (lambda (old new) (if (< old new) old new)) first rest))
-
 ;; Random functions
 (define (factorial n)
  (cond ((< n 0) #f)
