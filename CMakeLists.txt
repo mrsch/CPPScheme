@@ -61,6 +61,10 @@ set(EXT_PROJECTS_DIR
 
 add_subdirectory(${EXT_PROJECTS_DIR}/fmtlib EXCLUDE_FROM_ALL)
 
+find_package(SFML REQUIRED window graphics)
+include_directories(SYSTEM ${SFML_INCLUDE_DIR})
+
+
 ## #################################################################
 ## Source Path
 ## #################################################################

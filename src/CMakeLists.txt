@@ -24,7 +24,9 @@ target_link_libraries(scheme-lib
   PUBLIC
   PRIVATE
   fmt::fmt-header-only
-  stdc++fs)
+  stdc++fs
+  ${SFML_LIBRARIES}
+  )
 
 target_include_directories(scheme-lib
   PUBLIC
