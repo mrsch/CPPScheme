@@ -11,14 +11,14 @@ class Environment
 public:
   explicit Environment(const Env_ptr& parent = nullptr);
 
-  Maybe<Scheme_value> get(const std::string& key);
-  Maybe<Scheme_value> get_from_this(const std::string& key);
+  Maybe<Scheme_ptr> get(const std::string& key);
+  Maybe<Scheme_ptr> get_from_this(const std::string& key);
 
-  void add_to_env(const std::string& key, Scheme_value value);
+  void add_to_env(const std::string& key, Scheme_ptr value);
 
 private:
   Env_ptr parent;
-  std::unordered_map<std::string, Scheme_value> env;
+  std::unordered_map<std::string, Scheme_ptr> env;
 };
 
 #endif // ENVIRONMENT_HPP

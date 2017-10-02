@@ -74,7 +74,7 @@ Image Image::beside(const Image& other) const
 
 void Image::show()
 {
-  // FIXME:
+  display.display(image);
 }
 
 void Image::save(const std::string& filename)
@@ -82,7 +82,7 @@ void Image::save(const std::string& filename)
   image.save(filename.c_str());
 }
 
-std::string Image::as_string()
+std::string Image::as_string() const
 {
   return "Image";
 }

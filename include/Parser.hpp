@@ -13,7 +13,7 @@
 #include <optional>
 #include <string>
 
-Scheme_value parse(std::string& expr);
+Scheme_ptr parse(std::string& expr);
 
 Maybe<Symbol> parse_atom(std::string& expr);
 Maybe<Scheme_bool> parse_bool(std::string& expr);

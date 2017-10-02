@@ -9,7 +9,7 @@ Nil::Nil()
 {
 }
 
-std::string Nil::as_string()
+std::string Nil::as_string() const
 {
   return "nil";
 }

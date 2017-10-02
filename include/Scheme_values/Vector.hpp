@@ -14,14 +14,14 @@ class Environment;
 class Vector
 {
 public:
-  explicit Vector(const std::deque<Scheme_value>& vector);
+  explicit Vector(const std::deque<Scheme_ptr>& vector);
 
-  std::string as_string();
+  std::string as_string() const;
 
-  const std::deque<Scheme_value>& get_vector() const;
+  const std::deque<Scheme_ptr>& get_vector() const;
 
 private:
-  std::deque<Scheme_value> vector;
+  std::deque<Scheme_ptr> vector;
 };
 
 #endif // SCHEME_VALUES_VECTOR_HPP

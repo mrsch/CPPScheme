@@ -13,8 +13,8 @@
       (foldl func (func accum (car lst)) (cdr lst))))
 (define fold foldl)
 (define reduce foldr)
-(define (sum . lst) (fold + 0 lst))
-(define (product . lst) (fold * 1 lst))
+(define (sum lst) (fold + 0 lst))
+(define (product lst) (fold * 1 lst))
 
 ;; Numerical
 (define zero?              (curry = 0))

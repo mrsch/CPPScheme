@@ -10,13 +10,15 @@
 #include <unordered_map>
 
 class Scheme_value;
-using Eval_result = Either<Scheme_value, std::string>;
 
 template <typename T>
 using Maybe = std::optional<T>;
 
 class Environment;
 using Env_ptr = std::shared_ptr<Environment>;
+
+using Scheme_ptr = std::shared_ptr<Scheme_value>;
+using Eval_result = Either<Scheme_ptr, std::string>;
 
 template <class K, class V>
 Maybe<V> get_from_map(K key, const std::unordered_map<K, V>& map)

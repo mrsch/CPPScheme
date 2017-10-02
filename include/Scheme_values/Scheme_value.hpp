@@ -16,34 +16,41 @@
 #include "Utils.hpp"
 
 #include <optional>
+#include <signal.h>
 #include <string>
 #include <variant>
 
 class Environment;
+
+using Value = std::variant<Nil,
+                           Symbol,
+                           List,
+                           String,
+                           Character,
+                           Number,
+                           Scheme_bool,
+                           Lambda,
+                           Built_in,
+                           Vector,
+                           // Custom Scheme values
+                           Image>;
+
 class Scheme_value
 {
-  // TODO: Dotted list/Pair
-  using Value = std::variant<Nil,
-                             Symbol,
-                             List,
-                             String,
-                             Character,
-                             Number,
-                             Scheme_bool,
-                             Lambda,
-                             Built_in,
-                             Vector,
-                             // Custom Scheme values
-                             Image>;
-
 public:
-  Scheme_value() = default;
-  Scheme_value(const Scheme_value&) = default;
-  Scheme_value(Scheme_value&&) = default;
-  Scheme_value& operator=(const Scheme_value&) = default;
-  Scheme_value& operator=(Scheme_value&&) = default;
+  // template <typename V, typename... Args>
+  // explicit Scheme_value(id<V>, Args&&... args)
+  // {
+  //   value.emplace<V>(args...);
+  // }
 
-  explicit Scheme_value(Value value);
+  Scheme_value(const Value& value);
+
+  Scheme_value() = default;
+  Scheme_value(const Scheme_value&) = delete;
+  Scheme_value& operator=(const Scheme_value&) = delete;
+  Scheme_value(Scheme_value&&) = delete;
+  Scheme_value& operator=(Scheme_value&&) = delete;
 
   template <typename T>
   Maybe<T> get() const
@@ -55,11 +62,18 @@ public:
     }
   }
 
+  const Value& get_value() const
+  {
+    return value;
+  }
+
   std::string as_string() const;
-  const Eval_result eval(const Env_ptr& env) const;
 
 private:
   Value value = Nil();
 };
+
+const Eval_result eval(const Scheme_ptr& scheme,
+                       const std::shared_ptr<Environment>& env);
 
 #endif // SCHEME_VALUE_HPP

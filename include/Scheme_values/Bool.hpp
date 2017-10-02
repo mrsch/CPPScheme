@@ -12,9 +12,9 @@ class Scheme_bool
 {
 public:
   explicit Scheme_bool(bool b);
-  explicit Scheme_bool(Scheme_value val);
+  explicit Scheme_bool(const Scheme_ptr& val);
 
-  std::string as_string();
+  std::string as_string() const;
   bool get_bool() const;
 
 private:

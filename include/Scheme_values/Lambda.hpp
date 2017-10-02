@@ -12,16 +12,16 @@ class Lambda
 {
 public:
   Lambda(List arg_list,
-         const std::deque<Scheme_value>& body_expressions,
+         const std::deque<Scheme_ptr>& body_expressions,
          const Env_ptr& closure);
 
-  std::string as_string();
+  std::string as_string() const;
   Eval_result execute(const Env_ptr& env,
-                      const std::deque<Scheme_value>& args) const;
+                      const std::deque<Scheme_ptr>& args) const;
 
 private:
   List arg_list;
-  std::deque<Scheme_value> body_expressions;
+  std::deque<Scheme_ptr> body_expressions;
   Env_ptr closure;
 };
 

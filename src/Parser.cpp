@@ -14,42 +14,42 @@ bool is_symbol(char c)
   return symbols.find(c) != std::string::npos;
 }
 
-Scheme_value parse(std::string& expr)
+Scheme_ptr parse(std::string& expr)
 {
   while (expr.size() != 0) {
     trim(expr);
 
     if (auto res = parse_number(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_atom(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_vector(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_string(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_character(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_list(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_specials(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else if (auto res = parse_bool(expr)) {
-      return Scheme_value(*res);
+      return std::make_shared<Scheme_value>(*res);
     } else {
       parse_comment(expr);
     }
   }
 
-  return Scheme_value();
+  return Scheme_ptr();
 }
 
 Maybe<List> parse_specials(std::string& expr)
 {
   if (expr[0] == '\'') {
     expr.erase(0, 1);
-    std::deque<Scheme_value> list;
-    list.emplace_back(Scheme_value(Symbol("quote")));
-    list.emplace_back(Scheme_value(parse(expr)));
+    std::deque<Scheme_ptr> list;
+    list.emplace_back(std::make_shared<Scheme_value>(Symbol("quote")));
+    list.emplace_back(parse(expr));
 
     return List(list);
   }
@@ -61,9 +61,9 @@ Maybe<List> parse_list(std::string& expr)
 {
   if (expr[0] == '(') {
     expr.erase(0, 1);
-    std::deque<Scheme_value> list;
+    std::deque<Scheme_ptr> list;
     while (expr[0] != ')') {
-      list.emplace_back(Scheme_value(parse(expr)));
+      list.emplace_back(Scheme_ptr(parse(expr)));
     }
     expr.erase(0, 1);
     trim(expr);
@@ -78,9 +78,9 @@ Maybe<Vector> parse_vector(std::string& expr)
 {
   if (expr[0] == '#' && expr[1] == '(') {
     expr.erase(0, 2);
-    std::deque<Scheme_value> vector;
+    std::deque<Scheme_ptr> vector;
     while (expr[0] != ')') {
-      vector.emplace_back(Scheme_value(parse(expr)));
+      vector.emplace_back(Scheme_ptr(parse(expr)));
     }
     expr.erase(0, 1);
     trim(expr);

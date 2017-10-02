@@ -7,17 +7,17 @@ Built_in::Built_in(Procedure proc) : proc(proc)
 {
 }
 
-std::string Built_in::as_string()
+std::string Built_in::as_string() const
 {
   return "Built-in procedure";
 }
 
 Eval_result Built_in::execute(const std::shared_ptr<Environment>& env,
-                              const std::deque<Scheme_value>& args) const
+                              const std::deque<Scheme_ptr>& args) const
 {
-  std::deque<Scheme_value> evaled_args;
+  std::deque<Scheme_ptr> evaled_args;
   for (auto& arg : args) {
-    auto result = arg.eval(env);
+    auto result = eval(arg, env);
     if (result) {
       evaled_args.emplace_back(*result);
     } else {

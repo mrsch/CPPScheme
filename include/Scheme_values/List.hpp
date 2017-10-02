@@ -15,18 +15,18 @@ class List
 {
 public:
   List() = default;
-  explicit List(const std::deque<Scheme_value>& list);
+  explicit List(const std::deque<Scheme_ptr>& list);
 
   std::string as_string() const;
-  Eval_result eval(const Env_ptr& env) const;
+  Eval_result eval_list(const Env_ptr& env) const;
 
-  const std::deque<Scheme_value>& get_list() const;
+  const std::deque<Scheme_ptr>& get_list() const;
 
 private:
-  std::deque<Scheme_value> list;
+  std::deque<Scheme_ptr> list;
 
   Eval_result eval_special_forms(const Symbol& atom, const Env_ptr& env) const;
-  Eval_result eval_expressions(const std::deque<Scheme_value>& expr_list,
+  Eval_result eval_expressions(const std::deque<Scheme_ptr>& expr_list,
                                const Env_ptr& env) const;
 };
 

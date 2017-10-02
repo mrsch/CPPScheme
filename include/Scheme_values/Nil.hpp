@@ -13,7 +13,7 @@ class Nil
 public:
   Nil();
 
-  std::string as_string();
+  std::string as_string() const;
 };
 
 #endif // SCHEME_VALUES_NIL_HPP

@@ -7,15 +7,15 @@ Scheme_bool::Scheme_bool(bool b) : b(b)
 {
 }
 
-Scheme_bool::Scheme_bool(Scheme_value val)
+Scheme_bool::Scheme_bool(const Scheme_ptr& val)
 {
   b = true;
-  if (auto res = val.get<Scheme_bool>()) {
+  if (auto res = val->get<Scheme_bool>()) {
     b = res->get_bool();
   }
 }
 
-std::string Scheme_bool::as_string()
+std::string Scheme_bool::as_string() const
 {
   return b ? "#t" : "#f";
 }
